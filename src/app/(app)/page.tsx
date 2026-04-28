@@ -6,13 +6,16 @@ import { OrbitLogo } from "@/components/OrbitLogo";
 import { MapPinIcon, ShareIcon } from "@/components/icons";
 import {
   getCurrentOrbit,
+  getFriendsCitiesMap,
   getUnreadNotificationCount,
 } from "@/lib/data";
 import { OrbitSubtabs } from "./_components/OrbitSubtabs";
+import { FriendsCitiesMap } from "./_components/FriendsCitiesMap";
 
 export default async function CurrentOrbitPage() {
-  const [orbit, unread] = await Promise.all([
+  const [orbit, citiesMap, unread] = await Promise.all([
     getCurrentOrbit(),
+    getFriendsCitiesMap(),
     getUnreadNotificationCount(),
   ]);
 
@@ -45,6 +48,8 @@ export default async function CurrentOrbitPage() {
           </div>
           {orbit.city && <Stamp rotation={-6}>HIER</Stamp>}
         </section>
+
+        <FriendsCitiesMap data={citiesMap} />
 
         <OrbitSubtabs
           friends={orbit.friends}

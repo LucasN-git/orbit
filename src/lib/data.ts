@@ -253,6 +253,111 @@ export async function getCurrentOrbit() {
   };
 }
 
+// ── Friends Cities Map ─────────────────────────────────────────────────
+
+export type FriendCityCluster = {
+  orbitId: string;
+  city: string;
+  countryCode: string | null;
+  lat: number;
+  lng: number;
+  friends: { id: string; name: string; tone: Tone }[];
+};
+
+export type FriendsCitiesMap = {
+  me: { lat: number; lng: number; city: string } | null;
+  cities: FriendCityCluster[];
+};
+
+export async function getFriendsCitiesMap(): Promise<FriendsCitiesMap> {
+  const me = devUserId();
+  const sb = admin();
+  const mutualIds = await getMutualIds(me);
+
+  type OrbitCoords = {
+    name: string;
+    country_code: string | null;
+    centroid_lat: number | null;
+    centroid_lng: number | null;
+  };
+
+  const meLocPromise = sb
+    .from("user_locations")
+    .select("orbit:orbits(name, country_code, centroid_lat, centroid_lng)")
+    .eq("user_id", me)
+    .maybeSingle();
+
+  const friendLocsPromise =
+    mutualIds.length > 0
+      ? sb
+          .from("user_locations")
+          .select(
+            "user_id, orbit_id, orbit:orbits(name, country_code, centroid_lat, centroid_lng), user:users(first_name, last_name)",
+          )
+          .in("user_id", mutualIds)
+      : Promise.resolve({ data: [], error: null });
+
+  const [meLocRes, friendLocsRes] = await Promise.all([
+    meLocPromise,
+    friendLocsPromise,
+  ]);
+
+  const meOrbit = (meLocRes.data as { orbit: OrbitCoords | null } | null)
+    ?.orbit;
+  const meCoords =
+    meOrbit && meOrbit.centroid_lat != null && meOrbit.centroid_lng != null
+      ? {
+          lat: Number(meOrbit.centroid_lat),
+          lng: Number(meOrbit.centroid_lng),
+          city: meOrbit.name,
+        }
+      : null;
+
+  type FriendLocRow = {
+    user_id: string;
+    orbit_id: string;
+    orbit: OrbitCoords | null;
+    user: UserRow | null;
+  };
+  const rows = (friendLocsRes.data ?? []) as FriendLocRow[];
+
+  const clusters = new Map<string, FriendCityCluster>();
+  for (const r of rows) {
+    if (
+      !r.orbit ||
+      r.orbit.centroid_lat == null ||
+      r.orbit.centroid_lng == null
+    ) {
+      continue;
+    }
+    const existing = clusters.get(r.orbit_id);
+    const friend = {
+      id: r.user_id,
+      name: fullName(r.user ?? {}),
+      tone: toneFor(r.user_id),
+    };
+    if (existing) {
+      existing.friends.push(friend);
+    } else {
+      clusters.set(r.orbit_id, {
+        orbitId: r.orbit_id,
+        city: r.orbit.name,
+        countryCode: r.orbit.country_code,
+        lat: Number(r.orbit.centroid_lat),
+        lng: Number(r.orbit.centroid_lng),
+        friends: [friend],
+      });
+    }
+  }
+
+  return {
+    me: meCoords,
+    cities: Array.from(clusters.values()).sort(
+      (a, b) => b.friends.length - a.friends.length,
+    ),
+  };
+}
+
 // ── Calendar / Meetups ─────────────────────────────────────────────────
 
 export async function getUpcomingMeetups(): Promise<CalendarMeetup[]> {
