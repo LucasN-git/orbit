@@ -1,14 +1,15 @@
 import "server-only";
-import { admin, devUserId } from "@/lib/supabase/admin";
+import { admin } from "@/lib/supabase/admin";
+import { requireUserId } from "@/lib/auth";
 import { fullName, toneFor, type Tone } from "@/lib/data-helpers";
 
 export { toneFor, type Tone };
 
 /**
- * Server-only Data-Access-Layer. In der Auth-losen Dev-Phase liest alles
- * mit dem Service-Role-Client und filtert manuell auf DEV_USER_ID. Sobald
- * Auth steht, ersetzen wir admin() durch den session-basierten Client und
- * RLS übernimmt das Filtern.
+ * Server-only Data-Access-Layer. Identität kommt aus der Auth-Session
+ * (`requireUserId()`); Queries laufen weiter über den Service-Role-Client
+ * mit manuellem User-Filter. Sobald RLS-Policies stehen, ersetzen wir
+ * admin() durch den session-basierten Client und das Filtern fällt weg.
  */
 
 function fmtDay(iso: string) {
@@ -113,7 +114,7 @@ export type Me = {
 };
 
 export async function getMe(): Promise<Me> {
-  const me = devUserId();
+  const me = await requireUserId();
   const sb = admin();
   const [user, settings, location] = await Promise.all([
     sb.from("users").select("*").eq("id", me).single(),
@@ -135,7 +136,7 @@ export async function getMe(): Promise<Me> {
 // ── Current Orbit ──────────────────────────────────────────────────────
 
 export async function getCurrentOrbit() {
-  const me = devUserId();
+  const me = await requireUserId();
   const sb = admin();
   const meRow = await sb
     .from("user_locations")
@@ -270,7 +271,7 @@ export type FriendsCitiesMap = {
 };
 
 export async function getFriendsCitiesMap(): Promise<FriendsCitiesMap> {
-  const me = devUserId();
+  const me = await requireUserId();
   const sb = admin();
   const mutualIds = await getMutualIds(me);
 
@@ -361,7 +362,7 @@ export async function getFriendsCitiesMap(): Promise<FriendsCitiesMap> {
 // ── Calendar / Meetups ─────────────────────────────────────────────────
 
 export async function getUpcomingMeetups(): Promise<CalendarMeetup[]> {
-  const me = devUserId();
+  const me = await requireUserId();
   const sb = admin();
   const today = new Date().toISOString().slice(0, 10);
 
@@ -432,7 +433,7 @@ export async function getUpcomingMeetups(): Promise<CalendarMeetup[]> {
 // ── Trips ──────────────────────────────────────────────────────────────
 
 export async function getTrips(): Promise<TripCardData[]> {
-  const me = devUserId();
+  const me = await requireUserId();
   const sb = admin();
 
   type TripRow = {
@@ -525,7 +526,7 @@ function countryName(code: string | null): string | null {
 // ── Notifications ──────────────────────────────────────────────────────
 
 export async function getNotifications(): Promise<NotificationItem[]> {
-  const me = devUserId();
+  const me = await requireUserId();
   const sb = admin();
   type NotificationRow = {
     id: string;
@@ -646,7 +647,7 @@ function relativeTime(iso: string): string {
 // ── Profile detail ─────────────────────────────────────────────────────
 
 export async function getPersonProfile(id: string) {
-  const me = devUserId();
+  const me = await requireUserId();
   const sb = admin();
   const [{ data: userRaw }, { data: locRaw }] = await Promise.all([
     sb.from("users").select("*").eq("id", id).maybeSingle(),
@@ -692,7 +693,7 @@ export async function getPersonProfile(id: string) {
 // ── Personal Space ─────────────────────────────────────────────────────
 
 export async function getPersonalSpaceData() {
-  const me = devUserId();
+  const me = await requireUserId();
   const sb = admin();
   const [meRes, friendsRes, contactsTotal, contactsOnOrbit] =
     await Promise.all([
@@ -733,7 +734,7 @@ export async function getPersonalSpaceData() {
 // ── Notification Badge ─────────────────────────────────────────────────
 
 export async function getUnreadNotificationCount(): Promise<number> {
-  const me = devUserId();
+  const me = await requireUserId();
   const { count } = await admin()
     .from("notifications")
     .select("id", { count: "exact", head: true })

@@ -4,10 +4,10 @@ import { createClient } from "@supabase/supabase-js";
  * Server-only Supabase client mit dem Service-Role-Key.
  * Bypasst RLS — NIEMALS aus dem Browser importieren.
  *
- * Dev-Phase: wir haben noch keine echte Auth-Session. Alle Server Components
- * lesen mit diesem Client und filtern manuell auf DEV_USER_ID. Sobald der
- * Onboarding-/Auth-Flow steht, ersetzen wir die meisten Calls durch den
- * normalen `server.ts`-Client (mit RLS).
+ * Identität kommt aus `requireUserId()` (Auth-Session). data.ts filtert
+ * Queries manuell auf diese ID, bis RLS-Policies stehen — dann fällt der
+ * Service-Role-Pfad weg und Calls wechseln zum session-basierten Client
+ * in `server.ts`.
  *
  * Untyped — sobald `supabase gen types typescript` läuft, kommt die Database-
  * Generic dazu. Bis dahin kasten wir Query-Results in data.ts manuell.
@@ -27,18 +27,4 @@ export function admin() {
     auth: { persistSession: false, autoRefreshToken: false },
   });
   return cached;
-}
-
-/**
- * UUID des Dev-Users, dessen Sicht die App während der Auth-losen Phase
- * darstellt. Wird in `.env.local` gesetzt — siehe `supabase/dev_seed.sql`.
- */
-export function devUserId(): string {
-  const id = process.env.DEV_USER_ID;
-  if (!id) {
-    throw new Error(
-      "DEV_USER_ID is not set. Run supabase/dev_seed.sql and copy the printed UUID into .env.local.",
-    );
-  }
-  return id;
 }
