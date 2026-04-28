@@ -1,9 +1,11 @@
 # Orbit — Product Requirements Document
 
 > **Stand:** 2026-04-28
-> **Status:** MVP-Definition
+> **Status:** MVP in Implementierung — Stack ist Next.js-PWA (siehe §8). Native iOS-Wrapper ist Phase 2, nicht MVP-Blocker.
 > **Owner:** Lucas
 > **Source of Truth:** Diese Datei. Vault-Notes unter `~/Obsidian/Vault/main/Projects/orbit/` sind Brain-Dump-Quelle und können bei Konflikten aktualisiert werden.
+
+> **Stack-Korrektur (2026-04-28):** Frühere Versionen dieses PRDs nannten Expo / React Native + SwiftUI als Stack. Das ist **überholt**. Der MVP wird als Next.js-PWA gebaut und über `/manifest.webmanifest` + Apple-Web-App-Meta auf iOS installierbar gemacht. Eine native Wrapper-Variante (Capacitor / native Shell) bleibt als Phase-2-Option offen, blockiert aber nichts. Konsequenzen für AppStore, Kontakt-Sync und Standort-Permission sind in §4, §8, §11 dokumentiert.
 
 ---
 
@@ -25,8 +27,8 @@ Nur als Hintergrund für Produkt-Entscheidungen. Marketing- und Business-Plan si
 
 - **Cold-Start-Problem:** Die App ist wertlos ohne Kontakte. Onboarding und Invite-Mechanik sind deshalb das wichtigste Feature, nicht ein „Nice-to-have".
 - **Kritische Masse:** Mutuals und „Wer ist gerade hier"-Features brauchen Netzwerkdichte. Der MVP muss organischen Pull über Invites schaffen.
-- **Datenschutz als Feature:** Konkurrenz-Apps (Snapmap, etc.) leiden unter Stalking-Vorwürfen. Orbit positioniert sich bewusst dagegen: **Stadt-Granularität, kein GPS-Storage.** Das ist auch der Schlüssel zur Apple-Store-Approval.
-- **AppStore-Launch:** Apple-Review kann Tage bis Wochen dauern. Entsprechend Puffer einplanen, AGB / Datenschutz / Impressum / Website müssen vor Submission stehen.
+- **Datenschutz als Feature:** Konkurrenz-Apps (Snapmap, etc.) leiden unter Stalking-Vorwürfen. Orbit positioniert sich bewusst dagegen: **Stadt-Granularität, kein GPS-Storage.**
+- **PWA-Launch ohne AppStore-Gate:** MVP shippt als installierbare PWA über die Vercel-Deployment-URL bzw. eine eigene Domain. Kein AppStore-Review, keine Wochen-Wartezeit. AGB / Datenschutz / Impressum müssen trotzdem vor Public-Launch live sein. Eine native Shell für AppStore-Distribution kann nachgelagert kommen, ist aber kein Launch-Blocker.
 
 ---
 
@@ -40,7 +42,7 @@ Nur als Hintergrund für Produkt-Entscheidungen. Marketing- und Business-Plan si
 2. **Privacy by Design:** Stadt statt Koordinate. Keine Likes, keine Follower-Counts, keine öffentlichen Profile. Nichts wird gespeichert, was die App nicht braucht.
 3. **Kein Spielzeug:** Keine Gamification, keine Streaks, keine Punkte. Der Anreiz ist immer „dein echtes Leben wird besser".
 4. **Single-Action-Screens:** Jeder Screen hat genau eine Hauptaktion. Kein Choice-Overload.
-5. **Mobile-First, iOS-First:** Native Look-and-Feel. Apple Sign In primär. „When in Use"-Standortberechtigung reicht.
+5. **Mobile-First, iOS-First (PWA):** iOS-natives Look-and-Feel im Web umgesetzt — Postcard/Warm-Paper-Designsystem (siehe DESIGN1.md), `apple-web-app-capable`, eigenes App-Icon, Standalone-Display. Apple OAuth primär. Browser-Geolocation reicht für Stadt-Resolution.
 
 ---
 
@@ -50,28 +52,29 @@ Es gibt **zwei** Wege, mit Orbit zu interagieren. Beide sind auf minimale Fricti
 
 ### 4.1 Voller Account *(Standard)*
 
-Für alle, die Orbit aktiv nutzen wollen.
+Für alle, die Orbit aktiv nutzen wollen. Über die installierte PWA bzw. den Browser.
 
 | Schritt | Aktion | Tap-Count |
 |---|---|---|
-| 1 | Apple Sign In *(primär)* oder Google Sign In | 1 |
-| 2 | Standort freigeben *(„When in Use")* | 1 |
-| 3 | Kontakte synchronisieren | 1 |
+| 1 | Apple OAuth *(primär)* oder Google OAuth via Supabase Auth | 1 |
+| 2 | Standort freigeben *(Browser-Geolocation-Prompt)* | 1 |
+| 3 | Kontakte hinzufügen *(manuell / Username / QR / Deep-Link)* | 1+ |
 | 4 | Drin im Current Orbit | 1 |
 
-- **Gesamtdauer-Ziel:** unter 30 Sekunden
-- **Textfelder:** 0 (Name + Email kommen aus Apple/Google)
+- **Gesamtdauer-Ziel:** unter 30 Sekunden bis zum Current Orbit (ohne Kontakt-Adden, das kann ein Tap sein und später aufgestockt werden)
+- **Textfelder:** 0 für Auth (Name + Email kommen aus Apple/Google), Adressbuch-Sync ist nur in einer späteren nativen Shell verfügbar — siehe §11.2
 - **Kein Email/Passwort-Signup**
+- **Dev-Bypass:** In `NODE_ENV=development` greift ein `DEV_USER_ID`-Fallback in `requireUserId()` (`src/lib/auth.ts`), damit lokal ohne Auth-Flow gearbeitet werden kann. In Production strikt ausgeschaltet.
 
-### 4.2 Gastmodus *(PWA, ohne Installation)*
+### 4.2 Gastmodus *(öffentliche Web-Route, ohne Installation)*
 
 Für Empfänger einer Meetup-Einladung, die noch kein Orbit haben.
 
 - **Trigger:** Ein Orbit-User schickt eine Meetup-Anfrage an eine Person ohne Account → personalisierter Deep Link wird per iMessage/WhatsApp verschickt.
-- **Umgebung:** Schlanke Mobile-Webansicht (PWA). **Kein App-Download.**
+- **Umgebung:** Öffentliche Route in derselben Next.js-Codebase, ohne Auth-Wall, nur Magic-Token-validiert (`/i/[token]`). Schlanker als die App-Hauptansicht, aber im selben Designsystem.
 - **Inhalt:** Wer lädt ein, wann, wo, wer kommt noch.
 - **Aktionen:** Annehmen / Ablehnen / Gegenvorschlag, optional Textnachricht. Eingabe nur: Name.
-- **Übergang:** Nach dem Annehmen sanfter Hinweis zur App-Installation. Bereits eingegebener Name + Antworten werden beim Account-Erstellen automatisch verknüpft.
+- **Übergang:** Nach dem Annehmen sanfter Hinweis: „Installiere Orbit zum Home-Screen, um mehr zu sehen." Bereits eingegebener Name + Antworten werden beim Account-Erstellen automatisch verknüpft.
 
 **Was ein Gast NICHT kann:**
 
@@ -111,17 +114,19 @@ Der Text fadet sanft ein (max. 2 Sekunden Animation), darunter ein dezenter „S
 
 **Begründung:** Ohne Standort funktioniert Current Orbit nicht. Spätere Aktivierung führt zu Empty-State-Churn.
 
-### Screen 3 — Kontakte importieren ⭐ *Kritischster Screen*
+### Screen 3 — Kontakte hinzufügen ⭐ *Kritischster Screen*
 
-- Button: „Kontakte synchronisieren" → triggert iOS-Contacts-Permission-Dialog
-- **Sofort danach:** Anzeige „X deiner Kontakte sind schon auf Orbit" mit Profilbildern
-- Darunter: Vorausgewählte Liste an Kontakten zum Einladen via Deep Link
+> **Stack-Realität (PWA):** Browser haben **keine Adressbuch-API**. Der ursprünglich geplante One-Tap-Sync über `expo-contacts` ist im PWA-MVP nicht möglich. Stattdessen:
 
-**Empty State (keine Kontakte auf Orbit):**
+- Primär: **Invite-Flow** als CTA. Großer Share-Button mit vorgeschriebener Nachricht für WhatsApp/iMessage.
+- Sekundär: Username-/QR-/Deep-Link-Add (siehe §6.6).
+- Wenn Phase-2-Wrapper kommt, wird zusätzlich der native Adressbuch-Sync angeboten (mit denselben Hash-Garantien aus §11.2).
+
+**Default-Copy:**
 
 > „Du bist einer der Ersten! Lade 3 Freunde ein und Orbit wird lebendig."
 
-Mit großem Share-Button und vorgeschriebener Nachricht für WhatsApp/iMessage.
+**Permanent prominent:** „X von Y Kontakten sind auf Orbit" auf der Current-Orbit-Page (siehe §6.3 / §6.7).
 
 ### Screen 4 — Erster Blick auf Current Orbit
 
@@ -194,13 +199,21 @@ UX-Regel: **Alles Optionale ist initial ausgeblendet** und per kleinem „+" ein
 
 **Default-Tab nach Onboarding.** Hier sieht der User, wer von seinen Leuten gerade in derselben Stadt/Region ist.
 
-#### Hauptansicht
+#### Hauptansicht (vertikal, von oben nach unten)
 
-- **Meine Freunde / Kontakte** — Liste aller Kontakte im Current Orbit
-  - Optional: Unterscheidung in „Freundeskreise" (Post-MVP)
-- **Subtab Mutuals** — Freunde von Freunden
-  - Filter: Mindestanzahl an gemeinsamen Freunden (Default: 10)
-  - Optional: Filter auf gemeinsame Interessen *(Post-MVP)*
+1. **Standort-Header** — eigene aktuelle Stadt + „seit"-Datum, mit `HIER`-Stempel.
+2. **Friends-Cities-Map** *(implementiert)* — Postcard-Card mit Orbit-Radar:
+   - Eigene Position als zentraler Pin, drei konzentrische Hairline-Kreise (Orbit-Metapher passend zum App-Namen).
+   - Pins für jede Stadt, in der mindestens ein Mutual-Friend gerade ist (basierend auf `orbits.centroid_lat/lng`).
+   - Distanz-Skalierung sublinear (sqrt) damit weit-weg-Cities den View nicht zerquetschen, Bearing aus geographischer Richtung relativ zu sich selbst.
+   - Multi-Friend-City wird ein größerer Pin mit Counter.
+   - Darunter eine Kurzliste der Top-5-Städte mit „N Freunde", Rest als „+M weitere".
+   - Daten-Quelle: `getFriendsCitiesMap()` in `src/lib/data.ts`. Komponente: `src/app/(app)/_components/FriendsCitiesMap.tsx`.
+3. **Subtabs Friends / Mutuals**:
+   - **Friends** — alle Mutual-Kontakte im selben Orbit wie ich.
+   - **Mutuals** — Freunde von Freunden im selben Orbit. Filter: Mindestanzahl gemeinsamer Freunde (Default: 10). Lockt erst auf, wenn der User die Schwelle aus `user_settings.mutual_min_friends` an Kontakten auf Orbit hat (siehe §6.7).
+   - Optional: Unterscheidung in „Freundeskreise" / Filter auf gemeinsame Interessen *(Post-MVP)*.
+4. **Invite-Card** — „X von Y Kontakten sind auf Orbit" mit Share-Button (siehe §6.7).
 
 #### Klick auf Profil
 
@@ -381,44 +394,60 @@ Optionales Profil-Feld. Voraussetzung für 7.4 (AI-Agent) und für Mutual-Filter
 
 ## 8. Tech Stack
 
-### 8.1 Mobile App
+### 8.1 Eine Codebase, drei Use-Cases — Next.js-PWA
 
-- **Framework:** Expo / React Native (TypeScript)
-- **Plattform-Priorität:** iOS-First für MVP-Launch, Android folgt
-- **Auth:** Apple Sign In (`expo-apple-authentication`), Google Sign In (`@react-native-google-signin/google-signin`)
-- **Standort:** `expo-location` mit `When in Use`-Permission
-- **Kontakte:** `expo-contacts` — nur Lese-Zugriff, **nur gehashte Telefonnummern** verlassen das Device
-- **Push:** Expo Push Notifications (APNs)
-- **Deep Links:** Universal Links (iOS) für Invite + Gastmodus-Meetup-Links
-- **Navigation:** Tab-Navigation gemäß Abschnitt 6 (Notifications oben rechts, 4 Tabs unten + Plus-Button mittig)
+**Eine einzige Next.js-Codebase** (`!orbit_neu/`) beherbergt alle drei Aspekte unter Route-Gruppen:
 
-### 8.2 Backend
-
-- **Stack:** Supabase
-  - **Auth:** Supabase Auth mit Apple- und Google-OAuth-Providern
-  - **Datenbank:** Postgres (siehe Datenmodell §9)
-  - **Storage:** Supabase Storage für Profilbilder, Location-Bilder, CMS-Assets
-  - **Realtime:** Supabase Realtime für Live-Updates auf Meetups, Notifications, Current Orbit
-  - **Serverless Logic:** Supabase Edge Functions (Deno) für:
-    - Kontakt-Hash-Matching
-    - Stadt-Resolution (Reverse-Geocoding via externer Provider, nur Stadt zurückgeben, Koordinate verwerfen)
-    - Push-Notification-Trigger
-    - Gast-Account → voller Account Merge
-- **Row Level Security:** Aktiv. User dürfen nur eigene Daten schreiben, lesen nur freigegebene Daten anderer.
-
-### 8.3 Web
-
-Eine **einzige Next.js-Codebase** beherbergt drei Use-Cases unter unterschiedlichen Routen:
-
-| Route | Zweck | Auth |
+| Route-Gruppe | Zweck | Auth |
 |---|---|---|
-| `/m/[meetupId]` *(o.ä.)* | **PWA-Gastmodus:** Meetup als Gast annehmen | Keine *(nur Magic Token im Link)* |
-| `/admin/*` | **Admin-Page:** User-Management, Moderation, Stammdaten | Supabase Auth + Role-Check (`role = admin`) |
-| `/admin/cms/*` | **CMS-Tool:** Content-Editor (eingebettet in Admin) | Wie Admin |
+| `/(app)/*` | **Haupt-App** als installierbare PWA — Current Orbit, Calendar, Trips, Personal, Notifications, Profile | Supabase Auth (Apple/Google OAuth) |
+| `/onboarding/*` | Login, Standort, Kontakte, OAuth-Callback | Halb-public während des Flows |
+| `/i/[token]` | **Gastmodus-Link** für Meetup-Einladungen an Nicht-User (Magic-Token) | keine (nur Token) |
+| `/meetup/new`, `/trip/new`, `/meetup/[id]`, `/trip/[id]` | Erstellen + Detail-Ansicht | Auth |
+| `/admin/*` *(geplant)* | Admin-Page + CMS — siehe §10 | Supabase Auth + Role-Check (`role = admin`) |
 
-- **Framework:** Next.js (App Router) + Tailwind
+#### Frontend
+
+- **Framework:** Next.js 16 (App Router, Server Components default), React 19, TypeScript
+- **Styling:** Tailwind CSS v4 mit `@theme inline` Token-Definitionen aus `globals.css`. Designsystem-Tokens kommen aus DESIGN1.md (Farben, Typografie, Spacing, Radius, Schatten).
+- **Fonts:** Space Grotesk + Inter Tight + Space Mono via `next/font/google`
+- **PWA:** `src/app/manifest.ts`, `src/app/icon.tsx`, `src/app/apple-icon.tsx`, `apple-web-app-capable` Meta-Tags, `viewport-fit: cover` für iOS-Notch
+- **Komponenten:** Eigenes UI-Set in `src/components/ui/` (Card, Avatar, Stamp, Button, Chip, Polaroid, Input, EmptyState), Shell-Komponenten in `src/components/shell/` (TopBar, TabBar, PhoneFrame)
+- **Navigation:** Tab-Bar bottom-fixed, FAB-Plus mittig, Notifications oben rechts, gemäß §6
 - **Hosting:** Vercel
-- **Supabase-Client:** Server- und Client-seitig, RLS bleibt durchgehend aktiv
+
+#### Backend (Supabase)
+
+- **Auth:** Supabase Auth mit Apple- und Google-OAuth-Providern. Server-side Identität via `requireUserId()` in `src/lib/auth.ts` (Supabase SSR-Client). Dev-Bypass `DEV_USER_ID` siehe §4.1.
+- **Datenbank:** Postgres (siehe Datenmodell §9). Migrations in `supabase/migrations/`, Aggregat in `supabase/all.sql`, Dev-Seed in `supabase/dev_seed.sql`.
+- **Datenzugriff:** Server-only Data-Access-Layer in `src/lib/data.ts` (z.B. `getCurrentOrbit`, `getFriendsCitiesMap`, `getTrips`, `getUpcomingMeetups`, `getNotifications`). Aktuell gegen `admin()` (Service-Role) mit manuellem User-Filter; sobald RLS-Policies stehen, wird auf den session-basierten Client umgeschwenkt.
+- **Storage:** Supabase Storage für Profilbilder, Location-Bilder, CMS-Assets
+- **Realtime:** Supabase Realtime für Live-Updates auf Meetups, Notifications, Current Orbit
+- **Edge Functions (Deno):**
+  - Kontakt-Hash-Matching *(später, wenn nativer Kontakt-Sync existiert — im PWA-MVP entfällt dies)*
+  - Stadt-Resolution (Reverse-Geocoding via externer Provider — Eingabe-Coords aus Browser-Geolocation, Ausgabe nur Stadt, Coord wird verworfen)
+  - Push-Notification-Trigger *(via Web-Push, siehe 8.2)*
+  - Gast-Account → voller Account Merge
+- **Row Level Security:** Aktiv geplant. User dürfen nur eigene Daten schreiben, lesen nur freigegebene Daten anderer.
+
+### 8.2 Plattform-Capabilities — was geht in der PWA, was nicht
+
+| Capability | PWA-MVP | Native Wrapper *(Phase 2)* |
+|---|---|---|
+| Apple/Google OAuth | ✅ Supabase OAuth-Redirect | ✅ |
+| Standort (Stadt-Granularität) | ✅ `navigator.geolocation` einmalig beim App-Open / Pull-to-Refresh | ✅ Background-Refresh möglich |
+| Kontakte aus Adressbuch syncen | ❌ Keine Browser-API | ✅ `expo-contacts` o.ä. mit Hash-Pipeline |
+| Push-Notifications | ⚠️ Web-Push (über VAPID + iOS 16.4+ wenn als PWA installiert) | ✅ APNs |
+| Deep Links | ✅ Universal Links via `apple-app-site-association` (für Wrapper); im Browser: normale URLs | ✅ |
+| Home-Screen-Install | ✅ via Add-to-Home-Screen Prompt | n/a (App Store) |
+| Haptics | ⚠️ limitiert (`navigator.vibrate`) | ✅ |
+| Background-Tasks | ❌ | ✅ |
+
+Konsequenz: **Kontakt-Sync ist im MVP manuell** (Username, QR, Deep-Link, Invite). Push wird als Web-Push umgesetzt; falls iOS-Web-Push noch unzuverlässig ist, akzeptieren wir „nur In-App-Notifications" als MVP-Stand und pingen per WhatsApp/iMessage über die Invite-Mechanik.
+
+### 8.3 Phase 2 — Native Wrapper *(Optional, kein MVP-Blocker)*
+
+Wenn der PWA-Push oder der Kontakt-Sync limitierend werden, ist eine native Shell die nächste Stufe. Stand 2026-04-28 nicht entschieden, welche Variante (Capacitor um die Web-Codebase, oder eigene SwiftUI-Shell die dieselben Supabase-APIs nutzt). Diese Entscheidung kommt nach den ersten 100 echten Usern auf der PWA — vorher ist sie verfrüht.
 
 ---
 
@@ -496,17 +525,15 @@ Kern-Position: **Datenschutz ist Feature, nicht Pflicht.** Aktiv kommunizieren.
 
 ### 11.1 Standort
 
-- Apple-Permission: `When in Use` (kein `Always`)
-- Speicherung: nur Stadt-/Land-Name, **nie Koordinaten**
-- Reverse-Geocoding: Edge Function — Koordinate rein, Stadt raus, Koordinate verworfen
+- Browser-Permission: einmaliger `navigator.geolocation`-Prompt beim Onboarding und bei Refresh. Im Wrapper: `When in Use` (kein `Always`).
+- Speicherung: nur `orbit_id` (Verweis auf Stadt/Land), **nie Koordinaten**. Schema-Constraint dokumentiert in `user_locations` (siehe §9.1).
+- Reverse-Geocoding: Edge Function — Koordinate rein, Orbit raus, Koordinate sofort verworfen.
 - User-seitige Kommunikation: *„Orbit weiß, in welcher Stadt du bist, aber nie wo genau."*
 
 ### 11.2 Kontakt-Sync
 
-- Telefonnummern werden lokal **gehasht** (SHA-256 + Server-Salt), nur Hashes verlassen das Device
-- Server speichert ausschließlich Hash + Display-Name (vom User vergebener Name aus dem Adressbuch)
-- Match: Hash-Vergleich gegen `users.phone_hash`-Index, nie gegen Klartextnummern
-- **Keine Speicherung des kompletten Adressbuchs** — nur was matched + zur Anzeige in der eigenen Kontaktliste nötig ist
+- **PWA-MVP:** kein Adressbuch-Zugriff (keine Browser-API). Kontakte werden manuell oder via Invite-Link hinzugefügt — ein Phone-Hash existiert für diese Records nur, wenn der Empfänger bei der Account-Anlage sein Telefon hinterlegt.
+- **Phase-2 / nativer Wrapper:** Telefonnummern werden lokal **gehasht** (SHA-256 + Server-Salt), nur Hashes verlassen das Device. Server speichert ausschließlich Hash + Display-Name (vom User vergebener Name aus dem Adressbuch). Match: Hash-Vergleich gegen `users.phone_hash`-Index, nie gegen Klartextnummern. **Keine Speicherung des kompletten Adressbuchs** — nur was matched + zur Anzeige in der eigenen Kontaktliste nötig ist. Das Schema (`contacts.phone_hash`, `invites.target_phone_hash`) ist bereits darauf vorbereitet.
 
 ### 11.3 DSGVO
 
@@ -515,12 +542,21 @@ Kern-Position: **Datenschutz ist Feature, nicht Pflicht.** Aktiv kommunizieren.
 - **AGB / Datenschutzerklärung / Impressum:** vor App-Store-Submission live, gehostet als statische Pages in der Next.js-Codebase
 - **Cookie-/Tracking-Banner:** Web-Gastmodus-Page
 
-### 11.4 AppStore-Anforderungen (Apple)
+### 11.4 PWA-Launch-Anforderungen (MVP)
+
+- AGB / Datenschutzerklärung / Impressum als statische Pages in der Next.js-Codebase (`/legal/*`, geplant), erreichbar vor Public-Launch
+- Cookie-/Tracking-Banner, falls Analytics ergänzt wird
+- Web-Push-Subscription mit klarer Opt-in-Sequenz, falls Push aktiviert wird
+- Saubere PWA-Manifest-Werte (Icons in mehreren Größen, Theme-Color light+dark, `display: standalone`)
+- Domain mit gültigem TLS, eigene Brand-Domain bevorzugt (Vercel-Default-URL ist Fallback)
+
+### 11.5 AppStore-Anforderungen *(Phase 2, kein MVP-Blocker)*
+
+Wenn Phase 2 (nativer Wrapper) kommt:
 
 - Apple-Developer-Account aktiv
-- Universal-Link-Konfiguration (`apple-app-site-association`)
+- Universal-Link-Konfiguration (`apple-app-site-association`) — die Datei wird ohnehin in der Web-Codebase ausgeliefert
 - Datenschutz-Labels in App-Store-Connect ehrlich ausfüllen *(„Contact Info — used for App Functionality, not Tracking, not Linked")*
-- AGB / Privacy / Support-URL erreichbar
 - Review-Puffer: 1–3 Wochen einplanen
 
 ---
@@ -549,9 +585,9 @@ Tracking: Supabase Analytics + minimaler eigener Event-Log (`events`-Tabelle, op
 
 ## 13. Design
 
-_TBD — vom User später zu füllen._
+Vollständige Design-Spec: **DESIGN1.md** — Warm-Paper / Postcard-Designsystem mit 80s-Modernism-Akzent, iOS-First. Tokens (Farben, Typografie, Spacing, Radius, Schatten, Motion, Haptics) sind dort committed.
 
-Platzhalter-Sektion. Wird ausgearbeitet, sobald visuelles Konzept, Designsystem, Komponenten-Library und Wireframes definiert sind. Bis dahin gilt: native iOS-Look-and-Feel, dunkler Startscreen-Vibe (siehe 5, Screen 0), und „weniger ist mehr" als Leitlinie.
+> **Hinweis:** DESIGN1.md ist teilweise noch SwiftUI-formuliert (Datei-Layout, `Theme.swift`, `@ScaledMetric`). Die Token-Werte selbst sind plattformneutral und werden in `src/app/globals.css` als CSS-Custom-Properties + Tailwind v4 `@theme inline` umgesetzt. Eine Aktualisierung von DESIGN1.md auf Web-Konventionen ist offen, blockiert aber den MVP nicht.
 
 ---
 

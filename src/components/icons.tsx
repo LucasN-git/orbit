@@ -3,12 +3,17 @@ import { SVGProps } from "react";
 /**
  * Duotone-Style icons inspired by Phosphor.
  * Convention: secondary fill at 25% opacity, primary stroke at 1.5pt.
- * Color via `currentColor`, secondary via `--icon-secondary` CSS var (defaults
- * to currentColor at 25%).
+ * Pass `outline` to suppress all fills (Editorial-Action-Style, used in IconButton).
  */
-type IconProps = SVGProps<SVGSVGElement> & { size?: number };
+type IconProps = SVGProps<SVGSVGElement> & {
+  size?: number;
+  outline?: boolean;
+};
 
-const wrap = (size: number | undefined, props: SVGProps<SVGSVGElement>) => ({
+const wrap = (
+  size: number | undefined,
+  { outline, ...props }: IconProps,
+) => ({
   width: size ?? 24,
   height: size ?? 24,
   viewBox: "0 0 24 24",
@@ -17,6 +22,7 @@ const wrap = (size: number | undefined, props: SVGProps<SVGSVGElement>) => ({
   strokeWidth: 1.5,
   strokeLinecap: "round" as const,
   strokeLinejoin: "round" as const,
+  ...(outline ? { "data-outline": "" } : {}),
   ...props,
 });
 
@@ -151,6 +157,24 @@ export function ChatIcon({ size, ...p }: IconProps) {
         fillOpacity={fillOp}
       />
       <path d="M4 5h16v11H9l-5 4V5Z" />
+    </svg>
+  );
+}
+
+export function LockIcon({ size, ...p }: IconProps) {
+  return (
+    <svg {...wrap(size, p)}>
+      <rect
+        x="4"
+        y="11"
+        width="16"
+        height="10"
+        rx="2"
+        fill={fill}
+        fillOpacity={fillOp}
+      />
+      <rect x="4" y="11" width="16" height="10" rx="2" />
+      <path d="M8 11V8a4 4 0 0 1 8 0v3" />
     </svg>
   );
 }

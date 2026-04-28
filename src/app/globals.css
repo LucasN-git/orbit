@@ -79,8 +79,9 @@
   --radius-s: 8px;
   --radius-m: 12px;
   --radius-l: 16px;
-  --radius-xl: 24px;
+  --radius-xl: 28px;
   --radius-pill: 999px;
+  --radius-circle: 999px;
 
   /* Shadows (mirror tokens for arbitrary-value users) */
   --shadow-card: var(--shadow-card);
@@ -180,6 +181,11 @@ body {
   font-family: var(--font-body);
   font-style: italic;
   font-weight: 400;
+}
+
+/* Editorial outline-icon mode — suppress duotone fills on icons rendered with `outline` prop */
+svg[data-outline] *[fill]:not([fill="none"]) {
+  fill: transparent;
 }
 
 /* Hairline border helper */

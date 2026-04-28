@@ -3,8 +3,16 @@
 import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { EnvelopeIcon } from "@/components/icons";
-import { sendMagicLink, signInWithGoogle } from "../actions";
+import { EnvelopeIcon, LockIcon } from "@/components/icons";
+import {
+  sendMagicLink,
+  signInWithGoogle,
+  signInWithPassword,
+  signUpWithPassword,
+} from "../actions";
+
+type Mode = "magic" | "password";
+type PwSubMode = "signin" | "signup";
 
 export function LoginForm({
   error,
@@ -16,6 +24,9 @@ export function LoginForm({
   const [pending, startTransition] = useTransition();
   const [localError, setLocalError] = useState<string | null>(error ?? null);
   const [sentTo, setSentTo] = useState<string | null>(sent ?? null);
+  const [confirmTo, setConfirmTo] = useState<string | null>(null);
+  const [mode, setMode] = useState<Mode>("magic");
+  const [pwSub, setPwSub] = useState<PwSubMode>("signin");
 
   function handleMagicLink(formData: FormData) {
     setLocalError(null);
@@ -25,6 +36,21 @@ export function LoginForm({
         setLocalError(res.error);
       } else if (res?.ok) {
         setSentTo(res.email);
+      }
+    });
+  }
+
+  function handlePassword(formData: FormData) {
+    setLocalError(null);
+    startTransition(async () => {
+      const res =
+        pwSub === "signin"
+          ? await signInWithPassword(formData)
+          : await signUpWithPassword(formData);
+      if (res?.error) {
+        setLocalError(res.error);
+      } else if (res && "confirm" in res && res.confirm) {
+        setConfirmTo(res.email);
       }
     });
   }
@@ -41,24 +67,33 @@ export function LoginForm({
 
   if (sentTo) {
     return (
-      <div className="space-y-4">
-        <div className="bg-surface-accent hairline rounded-[var(--radius-l)] p-5 paper-edge">
-          <div className="t-label-l text-ink-primary mb-1">
-            Briefkasten checken
-          </div>
-          <p className="t-body-m text-ink-secondary">
+      <Inbox
+        title="Briefkasten checken"
+        body={
+          <>
             Wir haben dir einen Link an{" "}
             <strong className="text-ink-primary">{sentTo}</strong> geschickt.
             Klick drauf und du bist drin.
-          </p>
-        </div>
-        <button
-          onClick={() => setSentTo(null)}
-          className="t-label-m text-postage"
-        >
-          Andere Adresse verwenden
-        </button>
-      </div>
+          </>
+        }
+        onReset={() => setSentTo(null)}
+      />
+    );
+  }
+
+  if (confirmTo) {
+    return (
+      <Inbox
+        title="Email bestätigen"
+        body={
+          <>
+            Wir haben einen Bestätigungslink an{" "}
+            <strong className="text-ink-primary">{confirmTo}</strong>{" "}
+            geschickt. Klick drauf, dann kannst du dich anmelden.
+          </>
+        }
+        onReset={() => setConfirmTo(null)}
+      />
     );
   }
 
@@ -81,20 +116,67 @@ export function LoginForm({
         <span className="flex-1 h-px bg-hairline/40" />
       </div>
 
-      <form action={handleMagicLink} className="space-y-3">
-        <Input
-          type="email"
-          name="email"
-          required
-          placeholder="deine@email.de"
-          leading={<EnvelopeIcon size={18} />}
-          autoComplete="email"
-          inputMode="email"
-        />
-        <Button type="submit" block disabled={pending}>
-          {pending ? "Wird gesendet …" : "Magic-Link schicken"}
-        </Button>
-      </form>
+      <ModeToggle mode={mode} onChange={setMode} />
+
+      {mode === "magic" ? (
+        <form action={handleMagicLink} className="space-y-3">
+          <Input
+            type="email"
+            name="email"
+            required
+            placeholder="deine@email.de"
+            leading={<EnvelopeIcon size={18} />}
+            autoComplete="email"
+            inputMode="email"
+          />
+          <Button type="submit" block disabled={pending}>
+            {pending ? "Wird gesendet …" : "Magic-Link schicken"}
+          </Button>
+        </form>
+      ) : (
+        <form action={handlePassword} className="space-y-3">
+          <Input
+            type="email"
+            name="email"
+            required
+            placeholder="deine@email.de"
+            leading={<EnvelopeIcon size={18} />}
+            autoComplete="email"
+            inputMode="email"
+          />
+          <Input
+            type="password"
+            name="password"
+            required
+            minLength={6}
+            placeholder="Passwort"
+            leading={<LockIcon size={18} />}
+            autoComplete={
+              pwSub === "signin" ? "current-password" : "new-password"
+            }
+          />
+          <Button type="submit" block disabled={pending}>
+            {pending
+              ? pwSub === "signin"
+                ? "Wird angemeldet …"
+                : "Wird angelegt …"
+              : pwSub === "signin"
+                ? "Anmelden"
+                : "Konto anlegen"}
+          </Button>
+          <button
+            type="button"
+            onClick={() =>
+              setPwSub(pwSub === "signin" ? "signup" : "signin")
+            }
+            className="t-label-m text-postage block w-full text-center pt-1"
+          >
+            {pwSub === "signin"
+              ? "Noch kein Konto? Registrieren"
+              : "Schon ein Konto? Anmelden"}
+          </button>
+        </form>
+      )}
 
       {localError && (
         <div className="t-body-s text-error">{localError}</div>
@@ -104,6 +186,80 @@ export function LoginForm({
         Mit dem Anmelden akzeptierst du unsere AGB und unsere
         Datenschutzerklärung.
       </p>
+    </div>
+  );
+}
+
+function ModeToggle({
+  mode,
+  onChange,
+}: {
+  mode: Mode;
+  onChange: (m: Mode) => void;
+}) {
+  return (
+    <div
+      role="tablist"
+      className="flex p-1 rounded-[var(--radius-pill)] bg-sunken hairline"
+    >
+      <ToggleTab
+        active={mode === "magic"}
+        onClick={() => onChange("magic")}
+        label="Magic-Link"
+      />
+      <ToggleTab
+        active={mode === "password"}
+        onClick={() => onChange("password")}
+        label="Passwort"
+      />
+    </div>
+  );
+}
+
+function ToggleTab({
+  active,
+  onClick,
+  label,
+}: {
+  active: boolean;
+  onClick: () => void;
+  label: string;
+}) {
+  return (
+    <button
+      role="tab"
+      type="button"
+      aria-selected={active}
+      onClick={onClick}
+      className={`flex-1 h-9 t-label-m rounded-[var(--radius-pill)] transition-colors ${
+        active
+          ? "bg-canvas text-ink-primary paper-edge"
+          : "text-ink-tertiary"
+      }`}
+    >
+      {label}
+    </button>
+  );
+}
+
+function Inbox({
+  title,
+  body,
+  onReset,
+}: {
+  title: string;
+  body: React.ReactNode;
+  onReset: () => void;
+}) {
+  return (
+    <div className="space-y-4">
+      <div className="bg-surface-accent hairline rounded-[var(--radius-l)] p-5 paper-edge">
+        <div className="t-label-l text-ink-primary mb-1">{title}</div>
+        <p className="t-body-m text-ink-secondary">{body}</p>
+      </div>
+      <button onClick={onReset} className="t-label-m text-postage">
+        Andere Adresse verwenden
+      </button>
     </div>
   );
 }

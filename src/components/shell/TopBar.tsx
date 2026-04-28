@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ReactNode } from "react";
 import { BellIcon } from "@/components/icons";
+import { iconButtonClasses } from "@/components/ui/IconButton";
 
 type Props = {
   title: string;
@@ -44,11 +45,11 @@ export function TopBar({
             <Link
               href="/notifications"
               aria-label="Benachrichtigungen"
-              className="relative w-10 h-10 inline-flex items-center justify-center text-ink-primary"
+              className={`${iconButtonClasses()} relative`}
             >
-              <BellIcon size={22} />
+              <BellIcon size={20} outline />
               {unread > 0 && (
-                <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-stamp" />
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-stamp" />
               )}
             </Link>
           )}
