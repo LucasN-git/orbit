@@ -22,16 +22,26 @@ type Options = {
   /** If true, omits rounded background container — use when the platform
    *  applies its own rounded mask (e.g. iOS apple-touch-icon). */
   flush?: boolean;
+  /** If true, scales the logo down to fit a maskable safe-zone (~80% of size).
+   *  Required for PWA `purpose: "maskable"` icons on Android, where the
+   *  launcher applies an aggressive shape mask. */
+  padded?: boolean;
 };
 
-export function OgLogoTree({ size, flush = false }: Options) {
+export function OgLogoTree({ size, flush = false, padded = false }: Options) {
   const scale = size / 100;
-  const innerR = 12 * scale;
-  const midR = 30 * scale;
-  const outerR = 48 * scale;
-  const strokeW = Math.max(2, Math.round(2 * scale));
-  const centerD = Math.round(16 * scale);
-  const planetD = Math.round(5 * scale);
+  // Maskable spec: critical content within 80% diameter (40% radius from center).
+  // Padded uses outer radius 40 instead of 48; everything else scales proportionally.
+  const outerVB = padded ? 40 : 48;
+  const innerVB = padded ? 10 : 12;
+  const midVB = padded ? 25 : 30;
+  const innerR = innerVB * scale;
+  const midR = midVB * scale;
+  const outerR = outerVB * scale;
+  const shrink = padded ? 40 / 48 : 1;
+  const strokeW = Math.max(2, Math.round(2 * scale * shrink));
+  const centerD = Math.round(16 * scale * shrink);
+  const planetD = Math.round(5 * scale * shrink);
   const center = size / 2;
 
   const ring = (radius: number, opacity: number) => {
