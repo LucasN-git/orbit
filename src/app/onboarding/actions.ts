@@ -132,6 +132,35 @@ export async function signInWithGoogle() {
   }
 }
 
+/**
+ * Verifizierungsmail an die Adresse des eingeloggten Users schicken.
+ * Wir nutzen `signInWithOtp` mit `shouldCreateUser: false` — der User
+ * existiert ja schon. Beim Klick auf den Link landet er im Auth-Callback,
+ * der `email_verified_at` setzt und in die App redirected.
+ */
+export async function resendVerifyEmail() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user?.email) {
+    return { error: "Du bist nicht eingeloggt." };
+  }
+
+  const origin = siteOrigin(await headers());
+  const { error } = await supabase.auth.signInWithOtp({
+    email: user.email,
+    options: {
+      emailRedirectTo: `${origin}/onboarding/auth/callback`,
+      shouldCreateUser: false,
+    },
+  });
+
+  if (error) return { error: error.message };
+  return { ok: true, email: user.email };
+}
+
 export async function signOut() {
   const supabase = await createClient();
   await supabase.auth.signOut();

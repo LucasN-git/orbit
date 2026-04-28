@@ -11,6 +11,7 @@ import {
 import { SettingsPanel } from "./SettingsPanel";
 import { LocationRefreshBtn } from "./LocationRefreshBtn";
 import { LogoutBtn } from "./LogoutBtn";
+import { EmailVerifyBanner } from "./EmailVerifyBanner";
 
 export default async function PersonalPage() {
   const [data, unread] = await Promise.all([
@@ -26,6 +27,10 @@ export default async function PersonalPage() {
       <TopBar title="Profil" large unread={unread} />
 
       <div className="px-4 pb-28 space-y-6">
+        {!user.email_verified_at && (
+          <EmailVerifyBanner email={user.email} />
+        )}
+
         <section className="flex items-center gap-5">
           <Polaroid
             caption={

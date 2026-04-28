@@ -90,6 +90,7 @@ type UserRow = {
   last_name: string | null;
   email: string | null;
   avatar_url: string | null;
+  email_verified_at?: string | null;
 };
 
 type LocationRow = {

@@ -110,8 +110,9 @@ Diese Datei ist die **verbindliche Design-Spec** für Orbit v1 — abgeleitet au
 | `radius.s` | 8 | Inputs, kleine Chips |
 | `radius.m` | 12 | Buttons (außer Pill), Filter-Chips |
 | `radius.l` | 16 | Cards, Modals, Sheets |
-| `radius.xl` | 24 | Hero-Cards, Postkarten-Frames |
+| `radius.xl` | 28 | Hero-Cards, Postkarten-Frames, Bottom-Sheet-Top |
 | `radius.pill` | 999 | Primary-CTAs, Avatar-Containers |
+| `radius.circle` | 999 | Alias — semantisch für IconButton-Container |
 
 ### Schatten (Light Mode — Dark Mode = halbe Opacity)
 | Token | x | y | blur | spread | color |
@@ -214,8 +215,21 @@ Diese Datei ist die **verbindliche Design-Spec** für Orbit v1 — abgeleitet au
 - BG: `bg.canvas`
 - Title: `display.s` (Space Grotesk 20)
 - Large-Title-Variant für Top-Level-Tabs: `display.l` (Space Grotesk 32) bei Scroll = 0, animiert auf `display.s`
-- Trailing/Leading-Action: Tertiary-Button-Style
+- Trailing/Leading-Action: **IconButton** (siehe §5.7) — nicht mehr Tertiary-Text
 - Kein Backdrop-Blur — bei Scroll hairline-Border bottom einblenden
+
+### 5.7 IconButton (Editorial Circle Action)
+
+Circular Container für sekundäre Aktions-Glyphen (TopBar trailing/leading, Sheet-Dismiss, Bookmark, Share). Ersetzt den vorherigen Tertiary-Text-Button auf Action-Slots.
+
+- Größe `md`: **44 pt** Durchmesser (default), `sm`: **36 pt**
+- Form: `radius.circle`
+- BG: `bg.raised`
+- Border: hairline (1pt @ 0.4)
+- Schatten: `shadow.card`
+- Glyph: Outline-Variante (siehe §6 — `outline`-Prop, suppress duotone fill), color `ink.primary`, Größe **20 pt** (md) bzw. 18 pt (sm)
+- Active: `bg → surface.accent`, Scale `0.97`, Haptic `.light`
+- **Disziplin:** IconButton ist **niemals** in `accent.stamp` — Orange ist reserviert für Primary-CTAs und Live-Indikatoren. Aktion durch Form (Circle), nicht durch Farbe.
 
 ---
 
@@ -236,9 +250,18 @@ Diese Datei ist die **verbindliche Design-Spec** für Orbit v1 — abgeleitet au
 | `icon.xl` | 32 (Empty-States) |
 | `icon.hero` | 64 (Onboarding) |
 
-### Coloring
-- Duotone primary stroke: `ink.primary`
-- Duotone secondary fill: `accent.stamp @ 0.25` für CTA-Icons, sonst `ink.tertiary @ 0.4`
+### Coloring & Variants
+- **Duotone (default)**: primary stroke `ink.primary`, secondary fill `currentColor @ 22%`. Für Inhalts-Vokabular (Polaroid, Briefumschlag, Stempel, Card-Glyphen).
+- **Outline (Editorial)**: pure 1.5pt stroke, **kein** Fill. Aktiviert über `outline`-Prop am Icon. Wird in `IconButton` (§5.7) und für TopBar-Action-Slots verwendet — die Container-Form trägt die Bedeutung, das Glyph bleibt nüchtern. Implementiert via `data-outline` Attribut + globale CSS-Regel in `globals.css`.
+- Duotone secondary fill für CTA-Icons: `accent.stamp @ 0.25` (sparsam — Orange-Disziplin), sonst `ink.tertiary @ 0.4`.
+
+### Brand Mark (Orbit-Logo)
+
+- **Form:** konzentrische Ringe + Planeten-Punkt pro Ring + solider Akzent-Punkt im Zentrum. Vollständig 2D, keine Perspektive.
+- **Geometrie (100-unit viewBox):** centerR = 8, innerMin = 12, outerMax = 48, planetR = 2.5. Ring-Anzahl `rings`-Prop, default 3.
+- **Planeten-Winkel (deterministisch, diagonal verteilt):** `[60°, 200°, 320°, 110°, 250°, 30°]` — pro Ring-Index modulo. Kein Cluster, keine Random-Rotation.
+- **Farben:** Ringe + Planeten in `currentColor` (kontextabhängig), Zentrum **immer** in `accent.stamp` — der Orange-Punkt ist die einzige Stelle, an der das Logo Akzent zeigt.
+- **PWA-Icon (`/src/app/icon.tsx`, `/src/app/apple-icon.tsx`):** rendert das Logo via Satori-Div-Tree (siehe `/src/lib/og-logo.tsx`), Cream-Background mit `radius.xl ≈ 22% × size`. Apple-touch-icon flush, weil iOS eigene Squircle-Mask anwendet.
 
 ---
 
