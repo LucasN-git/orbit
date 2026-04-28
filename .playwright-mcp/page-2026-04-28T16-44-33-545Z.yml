@@ -1,0 +1,38 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e4]:
+    - banner [ref=e5]:
+      - generic [ref=e7]:
+        - link "Schließen" [ref=e8] [cursor=pointer]:
+          - /url: /
+          - img [ref=e9]
+        - heading "Neues Meetup" [level=1] [ref=e11]
+    - generic [ref=e12]:
+      - paragraph [ref=e13]: Schick eine Einladung raus — Titel und Datum reichen, alles andere ist optional.
+      - generic [ref=e14]:
+        - generic [ref=e15]: Worum geht's?
+        - textbox "Worum geht's?" [ref=e17]:
+          - /placeholder: z.B. Kaffee bei Marta
+      - generic [ref=e18]:
+        - generic [ref=e19]: Datum
+        - textbox "Datum" [ref=e21]
+      - generic [ref=e22]:
+        - generic [ref=e23]: Mehr Felder
+        - generic [ref=e24]:
+          - button "Uhrzeit" [ref=e25]:
+            - img [ref=e26]
+            - text: Uhrzeit
+          - button "Location" [ref=e28]:
+            - img [ref=e29]
+            - text: Location
+          - button "Kategorie" [ref=e31]:
+            - img [ref=e32]
+            - text: Kategorie
+          - button "Beschreibung" [ref=e34]:
+            - img [ref=e35]
+            - text: Beschreibung
+          - button "Weitere Teilnehmer" [ref=e37]:
+            - img [ref=e38]
+            - text: Weitere Teilnehmer
+    - button "Einladung senden" [ref=e41]
+  - button "Open Next.js Dev Tools" [ref=e47] [cursor=pointer]:
+    - img [ref=e48]

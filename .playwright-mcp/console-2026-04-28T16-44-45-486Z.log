@@ -1,0 +1,1010 @@
+[     314ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[     380ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[  803424ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[  803876ms] [LOG] [Fast Refresh] done in 551ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[  808007ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[  808030ms] [LOG] [Fast Refresh] done in 124ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[ 2336341ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[ 2336404ms] [LOG] [Fast Refresh] done in 130ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[ 2508413ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[ 2509060ms] [ERROR] ./src/app/(app)/page.tsx:10:1
+Module not found: Can't resolve './_components/OrbitSubtabs'
+   8 |   getUnreadNotificationCount,
+   9 | } from "@/lib/data";
+> 10 | import { OrbitSubtabs } from "./_components/OrbitSubtabs";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 |
+  12 | export default async function CurrentOrbitPage() {
+  13 |   const [orbit, unread] = await Promise.all([
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[ 2509264ms] [ERROR] ./src/app/(app)/page.tsx:10:1
+Module not found: Can't resolve './_components/OrbitSubtabs'
+   8 |   getUnreadNotificationCount,
+   9 | } from "@/lib/data";
+> 10 | import { OrbitSubtabs } from "./_components/OrbitSubtabs";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 |
+  12 | export default async function CurrentOrbitPage() {
+  13 |   const [orbit, unread] = await Promise.all([
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[ 2509365ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[ 2510828ms] [ERROR] ./src/app/(app)/page.tsx:10:1
+Module not found: Can't resolve './_components/OrbitSubtabs'
+   8 |   getUnreadNotificationCount,
+   9 | } from "@/lib/data";
+> 10 | import { OrbitSubtabs } from "./_components/OrbitSubtabs";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 |
+  12 | export default async function CurrentOrbitPage() {
+  13 |   const [orbit, unread] = await Promise.all([
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[ 2510829ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/calendar?_rsc=1ljxp:0
+[ 2510941ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/calendar?_rsc=1ljxp:0
+[ 2510980ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[ 2511009ms] [ERROR] ./src/app/(app)/page.tsx:10:1
+Module not found: Can't resolve './_components/OrbitSubtabs'
+   8 |   getUnreadNotificationCount,
+   9 | } from "@/lib/data";
+> 10 | import { OrbitSubtabs } from "./_components/OrbitSubtabs";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 |
+  12 | export default async function CurrentOrbitPage() {
+  13 |   const [orbit, unread] = await Promise.all([
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[ 2511114ms] [ERROR] ./src/app/(app)/page.tsx:10:1
+Module not found: Can't resolve './_components/OrbitSubtabs'
+   8 |   getUnreadNotificationCount,
+   9 | } from "@/lib/data";
+> 10 | import { OrbitSubtabs } from "./_components/OrbitSubtabs";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 |
+  12 | export default async function CurrentOrbitPage() {
+  13 |   const [orbit, unread] = await Promise.all([
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[ 2511115ms] [ERROR] ./src/app/(app)/page.tsx:10:1
+Module not found: Can't resolve './_components/OrbitSubtabs'
+   8 |   getUnreadNotificationCount,
+   9 | } from "@/lib/data";
+> 10 | import { OrbitSubtabs } from "./_components/OrbitSubtabs";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 |
+  12 | export default async function CurrentOrbitPage() {
+  13 |   const [orbit, unread] = await Promise.all([
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[ 2511127ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/calendar:0
+[ 2511363ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_react-dom_0bruynb._.js:15305
+[ 2511524ms] Error: ./src/app/(app)/page.tsx:10:1
+Module not found: Can't resolve './_components/OrbitSubtabs'
+   8 |   getUnreadNotificationCount,
+   9 | } from "@/lib/data";
+> 10 | import { OrbitSubtabs } from "./_components/OrbitSubtabs";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 |
+  12 | export default async function CurrentOrbitPage() {
+  13 |   const [orbit, unread] = await Promise.all([
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+    at <unknown> (Error: ./src/app/(app)/page.tsx:10:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at Object.getCompilationErrors (file:///home/lucas/Desktop/projects/!orbit_neu/node_modules/next/dist/server/dev/hot-reloader-turbopack.js:1186:59)
+    at DevBundlerService.getCompilationError (file:///home/lucas/Desktop/projects/!orbit_neu/node_modules/next/dist/server/lib/dev-bundler-service.js:44:55)
+    at DevServer.getCompilationError (file:///home/lucas/Desktop/projects/!orbit_neu/node_modules/next/dist/server/dev/next-dev-server.js:719:42)
+    at DevServer.findPageComponents (file:///home/lucas/Desktop/projects/!orbit_neu/node_modules/next/dist/server/dev/next-dev-server.js:689:43)
+    at async DevServer.renderErrorToResponseImpl (file:///home/lucas/Desktop/projects/!orbit_neu/node_modules/next/dist/server/base-server.js:1745:26)
+[ 2511523ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[ 2511530ms] [ERROR] ./src/app/(app)/page.tsx:10:1
+Module not found: Can't resolve './_components/OrbitSubtabs'
+   8 |   getUnreadNotificationCount,
+   9 | } from "@/lib/data";
+> 10 | import { OrbitSubtabs } from "./_components/OrbitSubtabs";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 |
+  12 | export default async function CurrentOrbitPage() {
+  13 |   const [orbit, unread] = await Promise.all([
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2511531ms] [ERROR] ./src/app/(app)/page.tsx:10:1
+Module not found: Can't resolve './_components/OrbitSubtabs'
+   8 |   getUnreadNotificationCount,
+   9 | } from "@/lib/data";
+> 10 | import { OrbitSubtabs } from "./_components/OrbitSubtabs";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 |
+  12 | export default async function CurrentOrbitPage() {
+  13 |   const [orbit, unread] = await Promise.all([
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2511620ms] [ERROR] ./src/app/(app)/page.tsx:10:1
+Module not found: Can't resolve './_components/OrbitSubtabs'
+   8 |   getUnreadNotificationCount,
+   9 | } from "@/lib/data";
+> 10 | import { OrbitSubtabs } from "./_components/OrbitSubtabs";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 |
+  12 | export default async function CurrentOrbitPage() {
+  13 |   const [orbit, unread] = await Promise.all([
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2511713ms] [ERROR] ./src/app/(app)/page.tsx:10:1
+Module not found: Can't resolve './_components/OrbitSubtabs'
+   8 |   getUnreadNotificationCount,
+   9 | } from "@/lib/data";
+> 10 | import { OrbitSubtabs } from "./_components/OrbitSubtabs";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 |
+  12 | export default async function CurrentOrbitPage() {
+  13 |   const [orbit, unread] = await Promise.all([
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2511725ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[ 2511901ms] [ERROR] ./src/app/(app)/page.tsx:10:1
+Module not found: Can't resolve './_components/OrbitSubtabs'
+   8 |   getUnreadNotificationCount,
+   9 | } from "@/lib/data";
+> 10 | import { OrbitSubtabs } from "./_components/OrbitSubtabs";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 |
+  12 | export default async function CurrentOrbitPage() {
+  13 |   const [orbit, unread] = await Promise.all([
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2511966ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[ 2512500ms] [ERROR] ./src/app/(app)/page.tsx:10:1
+Module not found: Can't resolve './_components/OrbitSubtabs'
+   8 |   getUnreadNotificationCount,
+   9 | } from "@/lib/data";
+> 10 | import { OrbitSubtabs } from "./_components/OrbitSubtabs";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 |
+  12 | export default async function CurrentOrbitPage() {
+  13 |   const [orbit, unread] = await Promise.all([
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2512549ms] [ERROR] ./src/app/(app)/page.tsx:10:1
+Module not found: Can't resolve './_components/OrbitSubtabs'
+   8 |   getUnreadNotificationCount,
+   9 | } from "@/lib/data";
+> 10 | import { OrbitSubtabs } from "./_components/OrbitSubtabs";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 |
+  12 | export default async function CurrentOrbitPage() {
+  13 |   const [orbit, unread] = await Promise.all([
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2512602ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[ 2513534ms] [ERROR] ./src/app/(app)/page.tsx:10:1
+Module not found: Can't resolve './_components/OrbitSubtabs'
+   8 |   getUnreadNotificationCount,
+   9 | } from "@/lib/data";
+> 10 | import { OrbitSubtabs } from "./_components/OrbitSubtabs";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 |
+  12 | export default async function CurrentOrbitPage() {
+  13 |   const [orbit, unread] = await Promise.all([
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2513593ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[ 2526557ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[ 2526753ms] [LOG] [Fast Refresh] done in 103ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[ 2526975ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[ 2527246ms] [LOG] [Fast Refresh] done in 371ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[ 2527701ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[ 2527760ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[ 2533491ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[ 2533658ms] [ERROR] ./src/app/(app)/calendar/page.tsx:6:1
+Module not found: Can't resolve '../_components/CalendarToggle'
+  4 |   getUnreadNotificationCount,
+  5 | } from "@/lib/data";
+> 6 | import { CalendarToggle } from "../_components/CalendarToggle";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  7 |
+  8 | export default async function CalendarPage() {
+  9 |   const [meetups, unread] = await Promise.all([
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[ 2533711ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/calendar?_rsc=1ljxp:0
+[ 2533748ms] [ERROR] ./src/app/(app)/calendar/page.tsx:6:1
+Module not found: Can't resolve '../_components/CalendarToggle'
+  4 |   getUnreadNotificationCount,
+  5 | } from "@/lib/data";
+> 6 | import { CalendarToggle } from "../_components/CalendarToggle";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  7 |
+  8 | export default async function CalendarPage() {
+  9 |   const [meetups, unread] = await Promise.all([
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[ 2533793ms] [ERROR] ./src/app/(app)/calendar/page.tsx:6:1
+Module not found: Can't resolve '../_components/CalendarToggle'
+  4 |   getUnreadNotificationCount,
+  5 | } from "@/lib/data";
+> 6 | import { CalendarToggle } from "../_components/CalendarToggle";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  7 |
+  8 | export default async function CalendarPage() {
+  9 |   const [meetups, unread] = await Promise.all([
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[ 2533795ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/calendar?_rsc=1ljxp:0
+[ 2533812ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/calendar:0
+[ 2533934ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_react-dom_0bruynb._.js:15305
+[ 2533977ms] Error: ./src/app/(app)/calendar/page.tsx:6:1
+Module not found: Can't resolve '../_components/CalendarToggle'
+  4 |   getUnreadNotificationCount,
+  5 | } from "@/lib/data";
+> 6 | import { CalendarToggle } from "../_components/CalendarToggle";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  7 |
+  8 | export default async function CalendarPage() {
+  9 |   const [meetups, unread] = await Promise.all([
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+    at <unknown> (Error: ./src/app/(app)/calendar/page.tsx:6:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at Object.getCompilationErrors (file:///home/lucas/Desktop/projects/!orbit_neu/node_modules/next/dist/server/dev/hot-reloader-turbopack.js:1186:59)
+    at DevBundlerService.getCompilationError (file:///home/lucas/Desktop/projects/!orbit_neu/node_modules/next/dist/server/lib/dev-bundler-service.js:44:55)
+    at DevServer.getCompilationError (file:///home/lucas/Desktop/projects/!orbit_neu/node_modules/next/dist/server/dev/next-dev-server.js:719:42)
+    at DevServer.findPageComponents (file:///home/lucas/Desktop/projects/!orbit_neu/node_modules/next/dist/server/dev/next-dev-server.js:689:43)
+    at async DevServer.renderErrorToResponseImpl (file:///home/lucas/Desktop/projects/!orbit_neu/node_modules/next/dist/server/base-server.js:1745:26)
+[ 2533979ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[ 2533982ms] [ERROR] ./src/app/(app)/calendar/page.tsx:6:1
+Module not found: Can't resolve '../_components/CalendarToggle'
+  4 |   getUnreadNotificationCount,
+  5 | } from "@/lib/data";
+> 6 | import { CalendarToggle } from "../_components/CalendarToggle";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  7 |
+  8 | export default async function CalendarPage() {
+  9 |   const [meetups, unread] = await Promise.all([
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2534072ms] [ERROR] ./src/app/(app)/calendar/page.tsx:6:1
+Module not found: Can't resolve '../_components/CalendarToggle'
+  4 |   getUnreadNotificationCount,
+  5 | } from "@/lib/data";
+> 6 | import { CalendarToggle } from "../_components/CalendarToggle";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  7 |
+  8 | export default async function CalendarPage() {
+  9 |   const [meetups, unread] = await Promise.all([
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2534102ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[ 2534175ms] [ERROR] ./src/app/(app)/calendar/page.tsx:6:1
+Module not found: Can't resolve '../_components/CalendarToggle'
+  4 |   getUnreadNotificationCount,
+  5 | } from "@/lib/data";
+> 6 | import { CalendarToggle } from "../_components/CalendarToggle";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  7 |
+  8 | export default async function CalendarPage() {
+  9 |   const [meetups, unread] = await Promise.all([
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2534241ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[ 2534785ms] [ERROR] ./src/app/(app)/calendar/page.tsx:6:1
+Module not found: Can't resolve '../_components/CalendarToggle'
+  4 |   getUnreadNotificationCount,
+  5 | } from "@/lib/data";
+> 6 | import { CalendarToggle } from "../_components/CalendarToggle";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  7 |
+  8 | export default async function CalendarPage() {
+  9 |   const [meetups, unread] = await Promise.all([
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2534850ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[ 2557766ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[ 2558036ms] [LOG] [Fast Refresh] done in 124ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[ 2558240ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[ 2558464ms] [LOG] [Fast Refresh] done in 323ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[ 2558798ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/calendar:0
+[ 2558867ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[ 2558917ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[ 2559045ms] Error: DEV_USER_ID is not set. Run supabase/dev_seed.sql and copy the printed UUID into .env.local.
+    at devUserId (about://React/Server/file:///home/lucas/Desktop/projects/!orbit_neu/.next/dev/server/chunks/ssr/%5Broot-of-the-server%5D__098v7mv._.js?0:940:15)
+    at getUpcomingMeetups (about://React/Server/file:///home/lucas/Desktop/projects/!orbit_neu/.next/dev/server/chunks/ssr/%5Broot-of-the-server%5D__098v7mv._.js?1:1089:161)
+    at CalendarPage (about://React/Server/file:///home/lucas/Desktop/projects/!orbit_neu/.next/dev/server/chunks/ssr/%5Broot-of-the-server%5D__0tmgxi_._.js?2:1275:150)
+    at resolveErrorDev (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:1919:105)
+    at processFullStringRow (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2434:29)
+    at processFullBinaryRow (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2393:9)
+    at processBinaryChunk (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2502:221)
+    at progress (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2689:13)
+[ 2585994ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[ 2586292ms] [LOG] [Fast Refresh] done in 155ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[ 2586409ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[ 2586576ms] [LOG] [Fast Refresh] done in 267ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[ 2586867ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/calendar:0
+[ 2586918ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[ 2586953ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[ 2587072ms] Error: DEV_USER_ID is not set. Run supabase/dev_seed.sql and copy the printed UUID into .env.local.
+    at devUserId (about://React/Server/file:///home/lucas/Desktop/projects/!orbit_neu/.next/dev/server/chunks/ssr/%5Broot-of-the-server%5D__0tmgxi_._.js?0:854:15)
+    at getUpcomingMeetups (about://React/Server/file:///home/lucas/Desktop/projects/!orbit_neu/.next/dev/server/chunks/ssr/%5Broot-of-the-server%5D__0tmgxi_._.js?1:1003:161)
+    at CalendarPage (about://React/Server/file:///home/lucas/Desktop/projects/!orbit_neu/.next/dev/server/chunks/ssr/%5Broot-of-the-server%5D__0tmgxi_._.js?2:1275:150)
+    at resolveErrorDev (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:1919:105)
+    at processFullStringRow (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2434:29)
+    at processFullBinaryRow (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2393:9)
+    at processBinaryChunk (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2502:221)
+    at progress (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2689:13)
+[ 2611949ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[ 2612185ms] [LOG] [Fast Refresh] done in 99ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[ 2612622ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/calendar:0
+[ 2612851ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[ 2612897ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[ 2613018ms] Error: DEV_USER_ID is not set. Run supabase/dev_seed.sql and copy the printed UUID into .env.local.
+    at devUserId (about://React/Server/file:///home/lucas/Desktop/projects/!orbit_neu/.next/dev/server/chunks/ssr/%5Broot-of-the-server%5D__0tmgxi_._.js?0:854:15)
+    at getUpcomingMeetups (about://React/Server/file:///home/lucas/Desktop/projects/!orbit_neu/.next/dev/server/chunks/ssr/%5Broot-of-the-server%5D__0tmgxi_._.js?1:1003:161)
+    at CalendarPage (about://React/Server/file:///home/lucas/Desktop/projects/!orbit_neu/.next/dev/server/chunks/ssr/%5Broot-of-the-server%5D__0tmgxi_._.js?2:1275:150)
+    at resolveErrorDev (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:1919:105)
+    at processFullStringRow (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2434:29)
+    at processFullBinaryRow (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2393:9)
+    at processBinaryChunk (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2502:221)
+    at progress (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2689:13)
+[ 2629111ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[ 2629419ms] [LOG] [Fast Refresh] done in 124ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[ 2629526ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[ 2629661ms] [LOG] [Fast Refresh] done in 235ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[ 2629838ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/calendar:0
+[ 2630014ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[ 2630051ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[ 2630143ms] Error: DEV_USER_ID is not set. Run supabase/dev_seed.sql and copy the printed UUID into .env.local.
+    at devUserId (about://React/Server/file:///home/lucas/Desktop/projects/!orbit_neu/.next/dev/server/chunks/ssr/%5Broot-of-the-server%5D__0tmgxi_._.js?0:854:15)
+    at getUpcomingMeetups (about://React/Server/file:///home/lucas/Desktop/projects/!orbit_neu/.next/dev/server/chunks/ssr/%5Broot-of-the-server%5D__0tmgxi_._.js?1:1003:161)
+    at CalendarPage (about://React/Server/file:///home/lucas/Desktop/projects/!orbit_neu/.next/dev/server/chunks/ssr/%5Broot-of-the-server%5D__0tmgxi_._.js?2:1275:150)
+    at resolveErrorDev (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:1919:105)
+    at processFullStringRow (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2434:29)
+    at processFullBinaryRow (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2393:9)
+    at processBinaryChunk (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2502:221)
+    at progress (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2689:13)
+[ 2648951ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[ 2649218ms] [LOG] [Fast Refresh] done in 137ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[ 2649743ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/calendar:0
+[ 2649818ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[ 2649873ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[ 2649980ms] Error: DEV_USER_ID is not set. Run supabase/dev_seed.sql and copy the printed UUID into .env.local.
+    at devUserId (about://React/Server/file:///home/lucas/Desktop/projects/!orbit_neu/.next/dev/server/chunks/ssr/%5Broot-of-the-server%5D__0tmgxi_._.js?0:854:15)
+    at getUpcomingMeetups (about://React/Server/file:///home/lucas/Desktop/projects/!orbit_neu/.next/dev/server/chunks/ssr/%5Broot-of-the-server%5D__0tmgxi_._.js?1:1003:161)
+    at CalendarPage (about://React/Server/file:///home/lucas/Desktop/projects/!orbit_neu/.next/dev/server/chunks/ssr/%5Broot-of-the-server%5D__0tmgxi_._.js?2:1275:150)
+    at resolveErrorDev (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:1919:105)
+    at processFullStringRow (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2434:29)
+    at processFullBinaryRow (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2393:9)
+    at processBinaryChunk (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2502:221)
+    at progress (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2689:13)
+[ 2668630ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[ 2668866ms] [ERROR] ./src/app/meetup/new/page.tsx:11:1
+Module not found: Can't resolve '@/lib/mock-data'
+   9 | import { Chip } from "@/components/ui/Chip";
+  10 | import { CloseIcon, PlusIcon } from "@/components/icons";
+> 11 | import { meetupCategories } from "@/lib/mock-data";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 |
+  13 | type OptionalKey =
+  14 |   | "time"
+
+Import map: aliased to relative './src/lib/mock-data' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/meetup/new/page.tsx [Client Component Browser]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/meetup/new/page.tsx [Client Component SSR]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[ 2668921ms] [ERROR] ./src/app/meetup/new/page.tsx:11:1
+Module not found: Can't resolve '@/lib/mock-data'
+   9 | import { Chip } from "@/components/ui/Chip";
+  10 | import { CloseIcon, PlusIcon } from "@/components/icons";
+> 11 | import { meetupCategories } from "@/lib/mock-data";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 |
+  13 | type OptionalKey =
+  14 |   | "time"
+
+Import map: aliased to relative './src/lib/mock-data' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/meetup/new/page.tsx [Client Component Browser]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/meetup/new/page.tsx [Client Component SSR]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[ 2668930ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/calendar:0
+[ 2669024ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_react-dom_0bruynb._.js:15305
+[ 2669065ms] Error: ./src/app/meetup/new/page.tsx:11:1
+Module not found: Can't resolve '@/lib/mock-data'
+   9 | import { Chip } from "@/components/ui/Chip";
+  10 | import { CloseIcon, PlusIcon } from "@/components/icons";
+> 11 | import { meetupCategories } from "@/lib/mock-data";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 |
+  13 | type OptionalKey =
+  14 |   | "time"
+
+Import map: aliased to relative './src/lib/mock-data' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/meetup/new/page.tsx [Client Component Browser]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/meetup/new/page.tsx [Client Component SSR]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+    at <unknown> (Error: ./src/app/meetup/new/page.tsx:11:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at Object.getCompilationErrors (file:///home/lucas/Desktop/projects/!orbit_neu/node_modules/next/dist/server/dev/hot-reloader-turbopack.js:1186:59)
+    at DevBundlerService.getCompilationError (file:///home/lucas/Desktop/projects/!orbit_neu/node_modules/next/dist/server/lib/dev-bundler-service.js:44:55)
+    at DevServer.getCompilationError (file:///home/lucas/Desktop/projects/!orbit_neu/node_modules/next/dist/server/dev/next-dev-server.js:719:42)
+    at DevServer.findPageComponents (file:///home/lucas/Desktop/projects/!orbit_neu/node_modules/next/dist/server/dev/next-dev-server.js:689:43)
+    at async DevServer.renderErrorToResponseImpl (file:///home/lucas/Desktop/projects/!orbit_neu/node_modules/next/dist/server/base-server.js:1745:26)
+[ 2669069ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[ 2669075ms] [ERROR] ./src/app/meetup/new/page.tsx:11:1
+Module not found: Can't resolve '@/lib/mock-data'
+   9 | import { Chip } from "@/components/ui/Chip";
+  10 | import { CloseIcon, PlusIcon } from "@/components/icons";
+> 11 | import { meetupCategories } from "@/lib/mock-data";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 |
+  13 | type OptionalKey =
+  14 |   | "time"
+
+Import map: aliased to relative './src/lib/mock-data' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/meetup/new/page.tsx [Client Component Browser]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/meetup/new/page.tsx [Client Component SSR]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2669178ms] [ERROR] ./src/app/meetup/new/page.tsx:11:1
+Module not found: Can't resolve '@/lib/mock-data'
+   9 | import { Chip } from "@/components/ui/Chip";
+  10 | import { CloseIcon, PlusIcon } from "@/components/icons";
+> 11 | import { meetupCategories } from "@/lib/mock-data";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 |
+  13 | type OptionalKey =
+  14 |   | "time"
+
+Import map: aliased to relative './src/lib/mock-data' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/meetup/new/page.tsx [Client Component Browser]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/meetup/new/page.tsx [Client Component SSR]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2669179ms] [ERROR] ./src/app/meetup/new/page.tsx:11:1
+Module not found: Can't resolve '@/lib/mock-data'
+   9 | import { Chip } from "@/components/ui/Chip";
+  10 | import { CloseIcon, PlusIcon } from "@/components/icons";
+> 11 | import { meetupCategories } from "@/lib/mock-data";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 |
+  13 | type OptionalKey =
+  14 |   | "time"
+
+Import map: aliased to relative './src/lib/mock-data' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/meetup/new/page.tsx [Client Component Browser]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/meetup/new/page.tsx [Client Component SSR]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2669278ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[ 2669409ms] [ERROR] ./src/app/meetup/new/page.tsx:11:1
+Module not found: Can't resolve '@/lib/mock-data'
+   9 | import { Chip } from "@/components/ui/Chip";
+  10 | import { CloseIcon, PlusIcon } from "@/components/icons";
+> 11 | import { meetupCategories } from "@/lib/mock-data";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 |
+  13 | type OptionalKey =
+  14 |   | "time"
+
+Import map: aliased to relative './src/lib/mock-data' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/meetup/new/page.tsx [Client Component Browser]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/meetup/new/page.tsx [Client Component SSR]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2669475ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[ 2670017ms] [ERROR] ./src/app/meetup/new/page.tsx:11:1
+Module not found: Can't resolve '@/lib/mock-data'
+   9 | import { Chip } from "@/components/ui/Chip";
+  10 | import { CloseIcon, PlusIcon } from "@/components/icons";
+> 11 | import { meetupCategories } from "@/lib/mock-data";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 |
+  13 | type OptionalKey =
+  14 |   | "time"
+
+Import map: aliased to relative './src/lib/mock-data' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/meetup/new/page.tsx [Client Component Browser]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/meetup/new/page.tsx [Client Component SSR]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2670083ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[ 2673001ms] [ERROR] ./src/app/meetup/new/page.tsx:11:1
+Module not found: Can't resolve '@/lib/mock-data'
+   9 | import { Chip } from "@/components/ui/Chip";
+  10 | import { CloseIcon, PlusIcon } from "@/components/icons";
+> 11 | import { meetupCategories } from "@/lib/mock-data";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 |
+  13 | type OptionalKey =
+  14 |   | "time"
+
+Import map: aliased to relative './src/lib/mock-data' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/meetup/new/page.tsx [Client Component Browser]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/meetup/new/page.tsx [Client Component SSR]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2673050ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[ 2680947ms] [ERROR] ./src/app/meetup/new/page.tsx:11:1
+Module not found: Can't resolve '@/lib/mock-data'
+   9 | import { Chip } from "@/components/ui/Chip";
+  10 | import { CloseIcon, PlusIcon } from "@/components/icons";
+> 11 | import { meetupCategories } from "@/lib/mock-data";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 |
+  13 | type OptionalKey =
+  14 |   | "time"
+
+Import map: aliased to relative './src/lib/mock-data' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/meetup/new/page.tsx [Client Component Browser]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/meetup/new/page.tsx [Client Component SSR]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2680969ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[ 2684880ms] [ERROR] ./src/app/meetup/new/page.tsx:11:1
+Module not found: Can't resolve '@/lib/mock-data'
+   9 | import { Chip } from "@/components/ui/Chip";
+  10 | import { CloseIcon, PlusIcon } from "@/components/icons";
+> 11 | import { meetupCategories } from "@/lib/mock-data";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 |
+  13 | type OptionalKey =
+  14 |   | "time"
+
+Import map: aliased to relative './src/lib/mock-data' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/meetup/new/page.tsx [Client Component Browser]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/meetup/new/page.tsx [Client Component SSR]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2684942ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[ 2685039ms] [ERROR] ./src/app/meetup/new/page.tsx:11:1
+Module not found: Can't resolve '@/lib/mock-data'
+   9 | import { Chip } from "@/components/ui/Chip";
+  10 | import { CloseIcon, PlusIcon } from "@/components/icons";
+> 11 | import { meetupCategories } from "@/lib/mock-data";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 |
+  13 | type OptionalKey =
+  14 |   | "time"
+
+Import map: aliased to relative './src/lib/mock-data' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/meetup/new/page.tsx [Client Component Browser]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/meetup/new/page.tsx [Client Component SSR]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2685102ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[ 2710314ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[ 2710347ms] [ERROR] ./src/app/meetup/new/page.tsx:11:1
+Module not found: Can't resolve '@/lib/mock-data'
+   9 | import { Chip } from "@/components/ui/Chip";
+  10 | import { CloseIcon, PlusIcon } from "@/components/icons";
+> 11 | import { meetupCategories } from "@/lib/mock-data";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 |
+  13 | type OptionalKey =
+  14 |   | "time"
+
+Import map: aliased to relative './src/lib/mock-data' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/meetup/new/page.tsx [Client Component Browser]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/meetup/new/page.tsx [Client Component SSR]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2710460ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[ 2710632ms] [ERROR] ./src/app/meetup/new/page.tsx:11:1
+Module not found: Can't resolve '@/lib/mock-data'
+   9 | import { Chip } from "@/components/ui/Chip";
+  10 | import { CloseIcon, PlusIcon } from "@/components/icons";
+> 11 | import { meetupCategories } from "@/lib/mock-data";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 |
+  13 | type OptionalKey =
+  14 |   | "time"
+
+Import map: aliased to relative './src/lib/mock-data' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/meetup/new/page.tsx [Client Component Browser]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/meetup/new/page.tsx [Client Component SSR]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2710633ms] [ERROR] ./src/app/meetup/new/page.tsx:11:1
+Module not found: Can't resolve '@/lib/mock-data'
+   9 | import { Chip } from "@/components/ui/Chip";
+  10 | import { CloseIcon, PlusIcon } from "@/components/icons";
+> 11 | import { meetupCategories } from "@/lib/mock-data";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 |
+  13 | type OptionalKey =
+  14 |   | "time"
+
+Import map: aliased to relative './src/lib/mock-data' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/meetup/new/page.tsx [Client Component Browser]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/meetup/new/page.tsx [Client Component SSR]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2710734ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[ 2710779ms] [ERROR] ./src/app/meetup/new/page.tsx:11:1
+Module not found: Can't resolve '@/lib/mock-data'
+   9 | import { Chip } from "@/components/ui/Chip";
+  10 | import { CloseIcon, PlusIcon } from "@/components/icons";
+> 11 | import { meetupCategories } from "@/lib/mock-data";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 |
+  13 | type OptionalKey =
+  14 |   | "time"
+
+Import map: aliased to relative './src/lib/mock-data' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/meetup/new/page.tsx [Client Component Browser]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/meetup/new/page.tsx [Client Component SSR]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2710783ms] [ERROR] ./src/app/meetup/new/page.tsx:11:1
+Module not found: Can't resolve '@/lib/mock-data'
+   9 | import { Chip } from "@/components/ui/Chip";
+  10 | import { CloseIcon, PlusIcon } from "@/components/icons";
+> 11 | import { meetupCategories } from "@/lib/mock-data";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 |
+  13 | type OptionalKey =
+  14 |   | "time"
+
+Import map: aliased to relative './src/lib/mock-data' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/meetup/new/page.tsx [Client Component Browser]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/meetup/new/page.tsx [Client Component SSR]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2710894ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[ 2710906ms] [ERROR] ./src/app/meetup/new/page.tsx:11:1
+Module not found: Can't resolve '@/lib/mock-data'
+   9 | import { Chip } from "@/components/ui/Chip";
+  10 | import { CloseIcon, PlusIcon } from "@/components/icons";
+> 11 | import { meetupCategories } from "@/lib/mock-data";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 |
+  13 | type OptionalKey =
+  14 |   | "time"
+
+Import map: aliased to relative './src/lib/mock-data' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/meetup/new/page.tsx [Client Component Browser]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/meetup/new/page.tsx [Client Component SSR]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2711007ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[ 2711019ms] [ERROR] ./src/app/meetup/new/page.tsx:11:1
+Module not found: Can't resolve '@/lib/mock-data'
+   9 | import { Chip } from "@/components/ui/Chip";
+  10 | import { CloseIcon, PlusIcon } from "@/components/icons";
+> 11 | import { meetupCategories } from "@/lib/mock-data";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 |
+  13 | type OptionalKey =
+  14 |   | "time"
+
+Import map: aliased to relative './src/lib/mock-data' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/meetup/new/page.tsx [Client Component Browser]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/meetup/new/page.tsx [Client Component SSR]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2711020ms] [ERROR] ./src/app/meetup/new/page.tsx:11:1
+Module not found: Can't resolve '@/lib/mock-data'
+   9 | import { Chip } from "@/components/ui/Chip";
+  10 | import { CloseIcon, PlusIcon } from "@/components/icons";
+> 11 | import { meetupCategories } from "@/lib/mock-data";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 |
+  13 | type OptionalKey =
+  14 |   | "time"
+
+Import map: aliased to relative './src/lib/mock-data' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/meetup/new/page.tsx [Client Component Browser]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/meetup/new/page.tsx [Client Component SSR]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2711120ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[ 2711126ms] [ERROR] ./src/app/meetup/new/page.tsx:11:1
+Module not found: Can't resolve '@/lib/mock-data'
+   9 | import { Chip } from "@/components/ui/Chip";
+  10 | import { CloseIcon, PlusIcon } from "@/components/icons";
+> 11 | import { meetupCategories } from "@/lib/mock-data";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 |
+  13 | type OptionalKey =
+  14 |   | "time"
+
+Import map: aliased to relative './src/lib/mock-data' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/meetup/new/page.tsx [Client Component Browser]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/meetup/new/page.tsx [Client Component SSR]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2711127ms] [ERROR] ./src/app/meetup/new/page.tsx:11:1
+Module not found: Can't resolve '@/lib/mock-data'
+   9 | import { Chip } from "@/components/ui/Chip";
+  10 | import { CloseIcon, PlusIcon } from "@/components/icons";
+> 11 | import { meetupCategories } from "@/lib/mock-data";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 |
+  13 | type OptionalKey =
+  14 |   | "time"
+
+Import map: aliased to relative './src/lib/mock-data' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/meetup/new/page.tsx [Client Component Browser]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/meetup/new/page.tsx [Client Component SSR]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2711178ms] [ERROR] ./src/app/meetup/new/page.tsx:11:1
+Module not found: Can't resolve '@/lib/mock-data'
+   9 | import { Chip } from "@/components/ui/Chip";
+  10 | import { CloseIcon, PlusIcon } from "@/components/icons";
+> 11 | import { meetupCategories } from "@/lib/mock-data";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 |
+  13 | type OptionalKey =
+  14 |   | "time"
+
+Import map: aliased to relative './src/lib/mock-data' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/meetup/new/page.tsx [Client Component Browser]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/meetup/new/page.tsx [Client Component SSR]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2711277ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[ 2711389ms] [ERROR] ./src/app/meetup/new/page.tsx:11:1
+Module not found: Can't resolve '@/lib/mock-data'
+   9 | import { Chip } from "@/components/ui/Chip";
+  10 | import { CloseIcon, PlusIcon } from "@/components/icons";
+> 11 | import { meetupCategories } from "@/lib/mock-data";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 |
+  13 | type OptionalKey =
+  14 |   | "time"
+
+Import map: aliased to relative './src/lib/mock-data' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/meetup/new/page.tsx [Client Component Browser]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/meetup/new/page.tsx [Client Component SSR]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2711392ms] [ERROR] ./src/app/meetup/new/page.tsx:11:1
+Module not found: Can't resolve '@/lib/mock-data'
+   9 | import { Chip } from "@/components/ui/Chip";
+  10 | import { CloseIcon, PlusIcon } from "@/components/icons";
+> 11 | import { meetupCategories } from "@/lib/mock-data";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 |
+  13 | type OptionalKey =
+  14 |   | "time"
+
+Import map: aliased to relative './src/lib/mock-data' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/meetup/new/page.tsx [Client Component Browser]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/meetup/new/page.tsx [Client Component SSR]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2711493ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[ 2711555ms] [ERROR] ./src/app/meetup/new/page.tsx:11:1
+Module not found: Can't resolve '@/lib/mock-data'
+   9 | import { Chip } from "@/components/ui/Chip";
+  10 | import { CloseIcon, PlusIcon } from "@/components/icons";
+> 11 | import { meetupCategories } from "@/lib/mock-data";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 |
+  13 | type OptionalKey =
+  14 |   | "time"
+
+Import map: aliased to relative './src/lib/mock-data' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/meetup/new/page.tsx [Client Component Browser]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/meetup/new/page.tsx [Client Component SSR]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2711558ms] [ERROR] ./src/app/meetup/new/page.tsx:11:1
+Module not found: Can't resolve '@/lib/mock-data'
+   9 | import { Chip } from "@/components/ui/Chip";
+  10 | import { CloseIcon, PlusIcon } from "@/components/icons";
+> 11 | import { meetupCategories } from "@/lib/mock-data";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 |
+  13 | type OptionalKey =
+  14 |   | "time"
+
+Import map: aliased to relative './src/lib/mock-data' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/meetup/new/page.tsx [Client Component Browser]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/meetup/new/page.tsx [Client Component SSR]
+    ./src/app/meetup/new/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[ 2711563ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/calendar:0

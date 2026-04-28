@@ -1,0 +1,84 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e4]:
+    - main [ref=e5]:
+      - generic [ref=e6]:
+        - generic [ref=e8]:
+          - button "Trip planen" [ref=e9]:
+            - img [ref=e10]
+          - link "Benachrichtigungen" [ref=e12] [cursor=pointer]:
+            - /url: /notifications
+            - img [ref=e13]
+        - heading "Trips" [level=1] [ref=e19]
+      - generic [ref=e20]:
+        - paragraph [ref=e21]: Geplante Aufenthalte in anderen Städten — hier siehst du, wer von deinen Leuten zur gleichen Zeit dort ist.
+        - list [ref=e22]:
+          - listitem [ref=e23]:
+            - generic [ref=e24]:
+              - generic [ref=e26]:
+                - img [ref=e27]
+                - text: SPA
+              - generic [ref=e31]: 12. Juni → 19. Juni · 8 Tage
+              - generic [ref=e32]: Mallorca
+              - generic [ref=e33]: Spanien
+              - generic [ref=e34]: Familienurlaub
+              - generic [ref=e36]:
+                - generic [ref=e37]:
+                  - generic [ref=e39]: L
+                  - generic [ref=e41]: A
+                - generic [ref=e42]:
+                  - strong [ref=e43]: Louis, Anna
+                  - text: sind auch da.
+          - listitem [ref=e44]:
+            - generic [ref=e45]:
+              - generic [ref=e47]:
+                - img [ref=e48]
+                - text: DEU
+              - generic [ref=e52]: 22. Mai → 25. Mai · 4 Tage
+              - generic [ref=e53]: Berlin
+              - generic [ref=e54]: Deutschland
+              - generic [ref=e55]: Hochzeit
+              - generic [ref=e57]:
+                - generic [ref=e60]: T
+                - generic [ref=e61]:
+                  - strong [ref=e62]: Tim
+                  - text: ist auch da.
+          - listitem [ref=e63]:
+            - generic [ref=e64]:
+              - generic [ref=e66]:
+                - img [ref=e67]
+                - text: POR
+              - generic [ref=e71]: 04. Sept. → 11. Sept. · 8 Tage
+              - generic [ref=e72]: Lissabon
+              - generic [ref=e73]: Portugal
+              - generic [ref=e75]: Niemand aus deinem Orbit ist hier — vielleicht jemanden einladen?
+        - button "Neuen Trip planen" [ref=e76]:
+          - img [ref=e77]
+          - text: Neuen Trip planen
+    - navigation "Hauptnavigation" [ref=e79]:
+      - list [ref=e80]:
+        - listitem [ref=e81]:
+          - link "Orbit" [ref=e82] [cursor=pointer]:
+            - /url: /
+            - img [ref=e83]
+            - generic [ref=e87]: Orbit
+        - listitem [ref=e88]:
+          - link "Kalender" [ref=e89] [cursor=pointer]:
+            - /url: /calendar
+            - img [ref=e90]
+            - generic [ref=e94]: Kalender
+        - listitem [ref=e95]:
+          - link "Neues Meetup planen" [ref=e96] [cursor=pointer]:
+            - /url: /meetup/new
+            - img [ref=e97]
+        - listitem [ref=e99]:
+          - link "Trips" [ref=e100] [cursor=pointer]:
+            - /url: /trips
+            - img [ref=e101]
+            - generic [ref=e105]: Trips
+        - listitem [ref=e106]:
+          - link "Profil" [ref=e107] [cursor=pointer]:
+            - /url: /personal
+            - img [ref=e108]
+            - generic [ref=e113]: Profil
+  - button "Open Next.js Dev Tools" [ref=e119] [cursor=pointer]:
+    - img [ref=e120]

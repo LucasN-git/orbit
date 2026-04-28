@@ -1,0 +1,87 @@
+- generic [ref=e4]:
+  - main [ref=e5]:
+    - generic [ref=e6]:
+      - link "Benachrichtigungen" [ref=e9] [cursor=pointer]:
+        - /url: /notifications
+        - img [ref=e10]
+      - heading "Current Orbit" [level=1] [ref=e16]
+    - generic [ref=e17]:
+      - generic [ref=e18]:
+        - generic [ref=e19]:
+          - img [ref=e20]
+          - generic [ref=e24]: Münster
+          - generic [ref=e25]: · seit 26.03.
+        - generic [ref=e26]: HIER
+      - generic [ref=e27]:
+        - button "Freunde · 4" [ref=e28]
+        - button "Mutuals · 3" [ref=e29]
+      - list [ref=e30]:
+        - listitem [ref=e31]:
+          - link "HW Henrik Wahl Münster · seit 26.03." [ref=e32] [cursor=pointer]:
+            - /url: /profile/henrik
+            - generic [ref=e33]:
+              - generic [ref=e35]: HW
+              - generic [ref=e36]:
+                - generic [ref=e37]: Henrik Wahl
+                - generic [ref=e38]: Münster · seit 26.03.
+              - img [ref=e39]
+        - listitem [ref=e41]:
+          - link "LB Lisa Brandt Münster · seit 02.04." [ref=e42] [cursor=pointer]:
+            - /url: /profile/lisa
+            - generic [ref=e43]:
+              - generic [ref=e45]: LB
+              - generic [ref=e46]:
+                - generic [ref=e47]: Lisa Brandt
+                - generic [ref=e48]: Münster · seit 02.04.
+              - img [ref=e49]
+        - listitem [ref=e51]:
+          - link "JR Jonas Reuter Münster · seit 12.04." [ref=e52] [cursor=pointer]:
+            - /url: /profile/jonas
+            - generic [ref=e53]:
+              - generic [ref=e55]: JR
+              - generic [ref=e56]:
+                - generic [ref=e57]: Jonas Reuter
+                - generic [ref=e58]: Münster · seit 12.04.
+              - img [ref=e59]
+        - listitem [ref=e61]:
+          - link "MH Marie Holm Münster · seit 20.04." [ref=e62] [cursor=pointer]:
+            - /url: /profile/marie
+            - generic [ref=e63]:
+              - generic [ref=e65]: MH
+              - generic [ref=e66]:
+                - generic [ref=e67]: Marie Holm
+                - generic [ref=e68]: Münster · seit 20.04.
+              - img [ref=e69]
+      - generic [ref=e71]:
+        - generic [ref=e72]:
+          - generic [ref=e73]: 4 von 23 Kontakten
+          - generic [ref=e74]: sind schon auf Orbit. Lade die anderen ein, dann wird's hier voll.
+        - button "Einladen" [ref=e75]:
+          - img [ref=e76]
+          - text: Einladen
+  - navigation "Hauptnavigation" [ref=e79]:
+    - list [ref=e80]:
+      - listitem [ref=e81]:
+        - link "Orbit" [ref=e82] [cursor=pointer]:
+          - /url: /
+          - img [ref=e83]
+          - generic [ref=e87]: Orbit
+      - listitem [ref=e88]:
+        - link "Kalender" [ref=e89] [cursor=pointer]:
+          - /url: /calendar
+          - img [ref=e90]
+          - generic [ref=e94]: Kalender
+      - listitem [ref=e95]:
+        - link "Neues Meetup planen" [ref=e96] [cursor=pointer]:
+          - /url: /meetup/new
+          - img [ref=e97]
+      - listitem [ref=e99]:
+        - link "Trips" [ref=e100] [cursor=pointer]:
+          - /url: /trips
+          - img [ref=e101]
+          - generic [ref=e105]: Trips
+      - listitem [ref=e106]:
+        - link "Profil" [ref=e107] [cursor=pointer]:
+          - /url: /personal
+          - img [ref=e108]
+          - generic [ref=e113]: Profil
