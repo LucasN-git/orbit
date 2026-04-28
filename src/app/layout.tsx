@@ -26,12 +26,22 @@ export const metadata: Metadata = {
   title: "orbit — your social life",
   description:
     "Wer von deinen Leuten gerade in deiner Stadt ist, wer mit dir reist, wer dich treffen will.",
+  applicationName: "orbit",
+  appleWebApp: {
+    capable: true,
+    title: "orbit",
+    statusBarStyle: "default",
+  },
+  formatDetection: {
+    telephone: false,
+  },
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
+  viewportFit: "cover",
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#F8F5EC" },
     { media: "(prefers-color-scheme: dark)", color: "#1F1A14" },
