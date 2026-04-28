@@ -233,7 +233,7 @@ function ToggleTab({
       onClick={onClick}
       className={`flex-1 h-9 t-label-m rounded-[var(--radius-pill)] transition-colors ${
         active
-          ? "bg-canvas text-ink-primary paper-edge"
+          ? "bg-canvas text-ink-primary shadow-[var(--shadow-card)]"
           : "text-ink-tertiary"
       }`}
     >
@@ -253,7 +253,7 @@ function Inbox({
 }) {
   return (
     <div className="space-y-4">
-      <div className="bg-surface-accent hairline rounded-[var(--radius-l)] p-5 paper-edge">
+      <div className="bg-surface-accent hairline rounded-[var(--radius-l)] p-5">
         <div className="t-label-l text-ink-primary mb-1">{title}</div>
         <p className="t-body-m text-ink-secondary">{body}</p>
       </div>

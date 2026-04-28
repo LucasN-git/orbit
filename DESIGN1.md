@@ -123,7 +123,7 @@ Diese Datei ist die **verbindliche Design-Spec** für Orbit v1 — abgeleitet au
 
 ### Hairline-Border
 - Default: `1pt solid hairline @ 0.4`
-- Inset top-only auf Cards für Paper-Layer-Effekt: `1pt solid #FFFFFF @ 0.5` als top-edge highlight.
+- **Kein** Inset-Top-Highlight in 80s Modernism — Paper-Layering raus, Cards/Buttons sind flat (Bauhaus-Direktive).
 
 ---
 
@@ -169,11 +169,10 @@ Diese Datei ist die **verbindliche Design-Spec** für Orbit v1 — abgeleitet au
 - Padding: `space.4` (16 pt) all sides
 - Border: hairline
 - Schatten: `shadow.card`
-- Inner top-edge highlight: `1pt #FFFFFF @ 0.5`
 
 #### Postkarten-Card (Hero, z. B. Onboarding 5/5, Trip-Header)
 - BG: `bg.raised`
-- Radius: `radius.xl` (24 pt)
+- Radius: `radius.xl` (28 pt)
 - Padding: `space.6` (24 pt)
 - Border: hairline
 - Schatten: `shadow.modal`

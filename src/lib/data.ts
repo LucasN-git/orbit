@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 import { admin } from "@/lib/supabase/admin";
 import { requireUserId } from "@/lib/auth";
 import { fullName, toneFor, type Tone } from "@/lib/data-helpers";
@@ -19,7 +20,9 @@ function fmtDay(iso: string) {
 
 // ── Helpers ────────────────────────────────────────────────────────────
 
-async function getMutualIds(meId: string): Promise<string[]> {
+// Per-Request-dedupliziert — getCurrentOrbit, getTrips, getPersonProfile
+// und getPersonalSpaceData rufen das alle, oft auf derselben Page.
+const getMutualIds = cache(async (meId: string): Promise<string[]> => {
   const { data, error } = await admin()
     .from("friend_links")
     .select("user_a, user_b")
@@ -29,7 +32,7 @@ async function getMutualIds(meId: string): Promise<string[]> {
   return ((data ?? []) as { user_a: string; user_b: string }[]).map((r) =>
     r.user_a === meId ? r.user_b : r.user_a,
   );
-}
+});
 
 // ── Types ──────────────────────────────────────────────────────────────
 

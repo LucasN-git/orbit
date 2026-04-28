@@ -9,6 +9,8 @@ type Props = {
   planets?: boolean;
   /** Radius eines Planeten in viewBox-Einheiten (default 2.5). */
   planetRadius?: number;
+  /** Planeten rotieren lassen (default false). */
+  spin?: boolean;
 };
 
 // Deterministische Winkel (in Grad) pro Ring — diagonal verteilt, kein Cluster.
@@ -27,6 +29,7 @@ export function OrbitLogo({
   strokeWidth = 2,
   planets = true,
   planetRadius = 2.5,
+  spin = false,
 }: Props) {
   const cx = 50;
   const cy = 50;
@@ -72,17 +75,36 @@ export function OrbitLogo({
             (PLANET_ANGLES[i % PLANET_ANGLES.length] * Math.PI) / 180;
           const x = cx + r * Math.cos(angle);
           const y = cy + r * Math.sin(angle);
+          const planet = (
+            <circle cx={x} cy={y} r={planetRadius} fill="currentColor" />
+          );
+          if (!spin) {
+            return <g key={`planet-${i}`}>{planet}</g>;
+          }
+          // Innerer Ring schneller, äußerer langsamer; abwechselnd Richtung.
+          const duration = 8 + i * 4;
+          const reverse = i % 2 === 1;
           return (
-            <circle
+            <g
               key={`planet-${i}`}
-              cx={x}
-              cy={y}
-              r={planetRadius}
-              fill="currentColor"
-            />
+              style={{
+                transformOrigin: "50px 50px",
+                animation: `orbit-spin ${duration}s linear infinite${reverse ? " reverse" : ""}`,
+              }}
+            >
+              {planet}
+            </g>
           );
         })}
       <circle cx={cx} cy={cy} r={centerR} fill="var(--stamp)" />
+      {spin && (
+        <style>{`
+          @keyframes orbit-spin {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(360deg); }
+          }
+        `}</style>
+      )}
     </svg>
   );
 }

@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
 
 /**
@@ -9,8 +10,12 @@ import { createClient } from "@/lib/supabase/server";
  *   2) DEV_USER_ID Fallback (Dev-Bypass, identisch zur Logik in proxy.ts)
  *
  * Wirft, wenn keiner gefunden — Server-Actions ohne Identität sind ein Bug.
+ *
+ * Per-Request-dedupliziert: data.ts-Funktionen rufen das mehrfach pro
+ * Page (jede getXxx ruft requireUserId), aber der Supabase-Auth-Call läuft
+ * nur einmal pro Request.
  */
-export async function requireUserId(): Promise<string> {
+export const requireUserId = cache(async (): Promise<string> => {
   const supabase = await createClient();
   const {
     data: { user },
@@ -25,4 +30,4 @@ export async function requireUserId(): Promise<string> {
   }
 
   throw new Error("Nicht eingeloggt.");
-}
+});

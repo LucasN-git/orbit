@@ -48,7 +48,7 @@ export function LocationStep({ className = "" }: { className?: string }) {
   if (phase === "done") {
     return (
       <div className={`space-y-4 ${className}`}>
-        <div className="bg-surface-accent hairline rounded-[var(--radius-l)] p-5 paper-edge text-center">
+        <div className="bg-surface-accent hairline rounded-[var(--radius-l)] p-5 text-center">
           <div className="t-label-s text-ink-secondary mb-1">
             Du bist in
           </div>

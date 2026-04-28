@@ -14,7 +14,7 @@ export function Card({
   if (variant === "postcard") {
     return (
       <div
-        className={`relative bg-raised rounded-[var(--radius-xl)] p-6 hairline paper-edge shadow-[var(--shadow-modal)] ${className}`}
+        className={`relative bg-raised rounded-[var(--radius-xl)] p-6 hairline shadow-[var(--shadow-modal)] ${className}`}
         {...rest}
       >
         {children}
@@ -23,7 +23,7 @@ export function Card({
   }
   return (
     <div
-      className={`relative bg-raised rounded-[var(--radius-l)] p-4 hairline paper-edge shadow-[var(--shadow-card)] ${className}`}
+      className={`relative bg-raised rounded-[var(--radius-l)] p-4 hairline shadow-[var(--shadow-card)] ${className}`}
       {...rest}
     >
       {children}

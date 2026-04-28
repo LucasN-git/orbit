@@ -22,7 +22,7 @@ export function EmailVerifyBanner({ email }: { email: string | null }) {
   }
 
   return (
-    <div className="bg-surface-accent hairline rounded-[var(--radius-l)] p-4 paper-edge">
+    <div className="bg-surface-accent hairline rounded-[var(--radius-l)] p-4">
       <div className="flex items-start gap-3">
         <span className="text-stamp shrink-0 mt-0.5">
           <EnvelopeIcon size={20} />
