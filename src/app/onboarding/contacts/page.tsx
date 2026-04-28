@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { ContactsStep } from "../_components/ContactsStep";
+import { skipOnboardingAndEnter } from "../actions";
 
 /**
  * Screen 3 — Kontakte importieren (PRD §5.3, kritischster Screen).
@@ -26,12 +26,14 @@ export default function OnboardingContacts() {
       </div>
 
       <div className="px-6 pb-[max(env(safe-area-inset-bottom),16px)] pt-3 hairline-top">
-        <Link
-          href="/"
-          className="block text-center t-label-m text-postage"
-        >
-          Erstmal überspringen →
-        </Link>
+        <form action={skipOnboardingAndEnter}>
+          <button
+            type="submit"
+            className="block w-full text-center t-label-m text-postage"
+          >
+            Erstmal überspringen →
+          </button>
+        </form>
       </div>
     </div>
   );

@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { ShareIcon, EnvelopeIcon } from "@/components/icons";
+import { markOnboardingComplete } from "../actions";
 
 /**
  * Web-Mockup-Variante des Kontakt-Sync-Screens.
@@ -17,6 +18,14 @@ export function ContactsStep() {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
   const [shared, setShared] = useState(false);
+  const [finishing, startFinishing] = useTransition();
+
+  function handleDone() {
+    startFinishing(async () => {
+      await markOnboardingComplete();
+      router.push("/");
+    });
+  }
 
   async function handleShare() {
     setBusy(true);
@@ -76,9 +85,10 @@ export function ContactsStep() {
       <Button
         variant="secondary"
         block
-        onClick={() => router.push("/")}
+        onClick={handleDone}
+        disabled={finishing}
       >
-        Fertig — los geht's
+        {finishing ? "Einen Moment …" : "Fertig — los geht's"}
       </Button>
     </div>
   );

@@ -5,7 +5,7 @@ import { TabBar } from "@/components/shell/TabBar";
 export default function AppLayout({ children }: { children: ReactNode }) {
   return (
     <PhoneFrame>
-      <main className="flex-1 overflow-y-auto no-scrollbar">{children}</main>
+      <main className="flex-1 overflow-y-auto no-scrollbar pt-4">{children}</main>
       <TabBar />
     </PhoneFrame>
   );

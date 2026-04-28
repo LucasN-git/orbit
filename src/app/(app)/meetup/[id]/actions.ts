@@ -1,8 +1,9 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { admin } from "@/lib/supabase/admin";
 import { requireUserId } from "@/lib/auth";
+import { TAGS } from "@/lib/cache-tags";
 
 export type RespondInput = {
   meetupId: string;
@@ -32,9 +33,9 @@ export async function respondToMeetup(
     return { ok: false, error: "Du bist nicht Teilnehmer dieses Meetups." };
   }
 
+  updateTag(TAGS.meetups);
+  updateTag(TAGS.notifications);
   revalidatePath(`/meetup/${input.meetupId}`);
-  revalidatePath("/calendar");
-  revalidatePath("/notifications");
   return { ok: true };
 }
 
@@ -49,6 +50,7 @@ export async function cancelMeetup(
     .eq("id", meetupId)
     .eq("creator_id", me);
   if (error) return { ok: false, error: error.message };
+  updateTag(TAGS.meetups);
   revalidatePath("/calendar");
   return { ok: true };
 }

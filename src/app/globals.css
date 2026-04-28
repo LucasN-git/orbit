@@ -3,22 +3,22 @@
 /* ─── Design tokens (DESIGN1.md) ───────────────────────────────────────── */
 
 :root {
-  /* Surfaces */
-  --canvas: #f8f5ec;
-  --raised: #f1ede0;
-  --sunken: #eae4d5;
-  --surface-accent: #ebe4d2;
+  /* Surfaces — weißer, weniger gelb-warm als die alte Cream-Palette */
+  --canvas: #fafaf5;
+  --raised: #f4f2ec;
+  --sunken: #ece8dc;
+  --surface-accent: #ede9d8;
 
-  /* Ink */
+  /* Ink — Hauptton bleibt warm, Sekundärtöne weniger gelb */
   --ink-primary: #2b2722;
-  --ink-secondary: #6e5236;
-  --ink-tertiary: #9c8463;
+  --ink-secondary: #5e5347;
+  --ink-tertiary: #978c7e;
 
-  /* Lines & accents */
-  --hairline: #d9c7a0;
-  --stamp: #d64300;
-  --stamp-pressed: #b03700;
-  --postage: #3f6b5f;
+  /* Lines & accents — Akzent komplett retro WhatsApp-Grün */
+  --hairline: #d4cabb;
+  --stamp: #1f8a5a;
+  --stamp-pressed: #166e48;
+  --postage: #2ea36a;
   --sky: #a6b8c9;
   --warning: #c18b2c;
   --error: #a33a2a;
@@ -31,17 +31,17 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --canvas: #1f1a14;
-    --raised: #2a241b;
-    --sunken: #16120d;
-    --surface-accent: #332b20;
-    --ink-primary: #f8f5ec;
-    --ink-secondary: #c9b894;
-    --ink-tertiary: #8c7a5a;
-    --hairline: #5a4a33;
-    --stamp: #ed5410;
-    --stamp-pressed: #d64300;
-    --postage: #7aae9c;
+    --canvas: #1c1814;
+    --raised: #28231c;
+    --sunken: #14110c;
+    --surface-accent: #2f2a21;
+    --ink-primary: #fafaf5;
+    --ink-secondary: #c9c1b1;
+    --ink-tertiary: #8b8275;
+    --hairline: #4f4538;
+    --stamp: #4cc187;
+    --stamp-pressed: #34a26d;
+    --postage: #5dd49f;
     --sky: #7e97ae;
 
     --shadow-card: 0 4px 12px 0 rgba(0, 0, 0, 0.3);

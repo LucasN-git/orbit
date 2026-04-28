@@ -1,8 +1,9 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { admin } from "@/lib/supabase/admin";
 import { requireUserId } from "@/lib/auth";
+import { TAGS } from "@/lib/cache-tags";
 
 /**
  * Add-via-Username (PRD §6.6 — Snapchat-Style: Username/QR/Deep-Link).
@@ -47,9 +48,9 @@ export async function addContactByUsername(
   );
   if (error) return { ok: false, error: error.message };
 
+  updateTag(TAGS.friends);
+  updateTag(TAGS.contacts);
   revalidatePath("/contacts");
-  revalidatePath("/");
-  revalidatePath("/personal");
 
   const name =
     [match.first_name, match.last_name].filter(Boolean).join(" ") ||
@@ -68,6 +69,7 @@ export async function removeContact(otherId: string): Promise<void> {
     .delete()
     .eq("user_a", a)
     .eq("user_b", b);
+  updateTag(TAGS.friends);
+  updateTag(TAGS.contacts);
   revalidatePath("/contacts");
-  revalidatePath("/");
 }

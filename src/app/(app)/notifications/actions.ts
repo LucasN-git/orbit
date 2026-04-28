@@ -1,8 +1,9 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { admin } from "@/lib/supabase/admin";
 import { requireUserId } from "@/lib/auth";
+import { TAGS } from "@/lib/cache-tags";
 
 /**
  * Markiert alle ungelesenen Notifications des Users als gelesen.
@@ -15,9 +16,6 @@ export async function markAllNotificationsRead(): Promise<void> {
     .update({ read_at: new Date().toISOString() } as never)
     .eq("user_id", me)
     .is("read_at", null);
+  updateTag(TAGS.notifications);
   revalidatePath("/notifications");
-  revalidatePath("/");
-  revalidatePath("/calendar");
-  revalidatePath("/trips");
-  revalidatePath("/personal");
 }

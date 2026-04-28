@@ -1,84 +1,106 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { TopBar } from "@/components/shell/TopBar";
+import { TopBarWithUnread } from "@/components/shell/TopBarWithUnread";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Stamp } from "@/components/ui/Stamp";
 import { Avatar } from "@/components/ui/Avatar";
+import { Skeleton } from "@/components/ui/Skeleton";
 import { PlaneIcon, PlusIcon } from "@/components/icons";
 import { EmptyState } from "@/components/ui/EmptyState";
-import {
-  getTrips,
-  getUnreadNotificationCount,
-  type TripCardData,
-} from "@/lib/data";
+import { getTrips, type TripCardData } from "@/lib/data";
 
-export default async function TripsPage() {
-  const [trips, unread] = await Promise.all([
-    getTrips(),
-    getUnreadNotificationCount(),
-  ]);
+const tripsTrailing = (
+  <Link
+    href="/trip/new"
+    aria-label="Trip planen"
+    className="w-10 h-10 inline-flex items-center justify-center text-ink-primary"
+  >
+    <PlusIcon size={22} />
+  </Link>
+);
 
+export default function TripsPage() {
   return (
     <>
-      <TopBar
-        title="Trips"
-        large
-        unread={unread}
-        trailing={
-          <Link
-            href="/trip/new"
-            aria-label="Trip planen"
-            className="w-10 h-10 inline-flex items-center justify-center text-ink-primary"
-          >
-            <PlusIcon size={22} />
-          </Link>
+      <Suspense
+        fallback={
+          <TopBar title="Trips" large unread={0} trailing={tripsTrailing} />
         }
-      />
+      >
+        <TopBarWithUnread title="Trips" large trailing={tripsTrailing} />
+      </Suspense>
 
-      <div className="px-4 pb-28 space-y-5">
-        {trips.length === 0 ? (
-          <EmptyState
-            icon={<PlaneIcon size={32} />}
-            title="Keine Reisen geplant."
-            body="Trag deinen nächsten Trip ein, damit andere wissen, wo du bist."
-            cta={
-              <Link href="/trip/new">
-                <Button variant="primary">
-                  <PlusIcon size={18} /> Trip planen
-                </Button>
-              </Link>
-            }
-          />
-        ) : (
-          <>
-            <p className="t-body-m text-ink-secondary">
-              Geplante Aufenthalte in anderen Städten — hier siehst du, wer
-              von deinen Leuten zur gleichen Zeit dort ist.
-            </p>
+      <Suspense fallback={<TripsBodySkeleton />}>
+        <TripsBody />
+      </Suspense>
+    </>
+  );
+}
 
-            <ul className="space-y-4">
-              {trips.map((t) => (
-                <li key={t.id}>
-                  <Link
-                    href={`/trip/${t.id}`}
-                    className="block active:scale-[0.99] transition-transform"
-                  >
-                    <TripCard trip={t} />
-                  </Link>
-                </li>
-              ))}
-            </ul>
+async function TripsBody() {
+  const trips = await getTrips();
 
+  return (
+    <div className="px-4 pb-28 space-y-5">
+      {trips.length === 0 ? (
+        <EmptyState
+          icon={<PlaneIcon size={32} />}
+          title="Keine Reisen geplant."
+          body="Trag deinen nächsten Trip ein, damit andere wissen, wo du bist."
+          cta={
             <Link href="/trip/new">
-              <Button variant="secondary" block>
-                <PlusIcon size={18} />
-                Neuen Trip planen
+              <Button variant="primary">
+                <PlusIcon size={18} /> Trip planen
               </Button>
             </Link>
-          </>
-        )}
-      </div>
-    </>
+          }
+        />
+      ) : (
+        <>
+          <p className="t-body-m text-ink-secondary">
+            Geplante Aufenthalte in anderen Städten — hier siehst du, wer
+            von deinen Leuten zur gleichen Zeit dort ist.
+          </p>
+
+          <ul className="space-y-4">
+            {trips.map((t) => (
+              <li key={t.id}>
+                <Link
+                  href={`/trip/${t.id}`}
+                  className="block active:scale-[0.99] transition-transform"
+                >
+                  <TripCard trip={t} />
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          <Link href="/trip/new">
+            <Button variant="secondary" block>
+              <PlusIcon size={18} />
+              Neuen Trip planen
+            </Button>
+          </Link>
+        </>
+      )}
+    </div>
+  );
+}
+
+function TripsBodySkeleton() {
+  return (
+    <div className="px-4 pb-28 space-y-5">
+      <Skeleton className="h-4 w-3/4" />
+      {Array.from({ length: 2 }).map((_, i) => (
+        <Card key={i} variant="postcard">
+          <Skeleton className="h-3 w-1/3 mb-2" />
+          <Skeleton className="h-8 w-2/3 mb-2" />
+          <Skeleton className="h-4 w-1/2" />
+        </Card>
+      ))}
+    </div>
   );
 }
 

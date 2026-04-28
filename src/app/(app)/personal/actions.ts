@@ -1,10 +1,12 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { admin } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { requireUserId } from "@/lib/auth";
+import { hashPhone, normalizeToE164 } from "@/lib/phone";
+import { TAGS } from "@/lib/cache-tags";
 
 export async function updateShareLocation(value: boolean): Promise<void> {
   const me = await requireUserId();
@@ -12,6 +14,7 @@ export async function updateShareLocation(value: boolean): Promise<void> {
     .from("user_settings")
     .update({ share_location: value } as never)
     .eq("user_id", me);
+  updateTag(TAGS.user);
   revalidatePath("/personal");
 }
 
@@ -22,6 +25,8 @@ export async function updateMutualMinFriends(value: number): Promise<void> {
     .from("user_settings")
     .update({ mutual_min_friends: clamped } as never)
     .eq("user_id", me);
+  updateTag(TAGS.user);
+  updateTag(TAGS.orbit);
   revalidatePath("/personal");
   revalidatePath("/");
 }
@@ -45,6 +50,7 @@ export async function updateNotificationPref(
     .from("user_settings")
     .update({ notification_prefs: next } as never)
     .eq("user_id", me);
+  updateTag(TAGS.user);
   revalidatePath("/personal");
 }
 
@@ -101,6 +107,8 @@ export async function refreshMyLocation({
       } as never,
       { onConflict: "user_id" },
     );
+  updateTag(TAGS.user);
+  updateTag(TAGS.orbit);
   revalidatePath("/personal");
   revalidatePath("/");
   return { orbit: best.name };
@@ -110,6 +118,77 @@ export async function logoutAction(): Promise<void> {
   const supabase = await createClient();
   await supabase.auth.signOut();
   redirect("/onboarding");
+}
+
+export type UpdateProfileResult =
+  | { ok: true }
+  | { error: string; field?: "first_name" | "last_name" | "phone" | "username" };
+
+/**
+ * Profil bearbeiten. Selbe Pflichtfeld-Regel wie im Onboarding (Vorname,
+ * Nachname, Telefon). Telefonnummer wird normalisiert und mit-gehasht,
+ * damit das Adressbuch-Match-Trigger danach wieder konsistent ist.
+ */
+export async function updateProfile(
+  formData: FormData,
+): Promise<UpdateProfileResult> {
+  const me = await requireUserId();
+
+  const firstName = String(formData.get("first_name") ?? "").trim();
+  const lastName = String(formData.get("last_name") ?? "").trim();
+  const phoneRaw = String(formData.get("phone") ?? "").trim();
+  const usernameRaw = String(formData.get("username") ?? "").trim();
+
+  if (!firstName) return { error: "Vorname fehlt.", field: "first_name" };
+  if (!lastName) return { error: "Nachname fehlt.", field: "last_name" };
+  if (!phoneRaw) return { error: "Telefonnummer fehlt.", field: "phone" };
+
+  const phone = normalizeToE164(phoneRaw);
+  if (!phone) {
+    return {
+      error: "Telefonnummer ungültig. Beispiel: +49 170 1234567",
+      field: "phone",
+    };
+  }
+  const phone_hash = hashPhone(phone);
+
+  let username: string | null = null;
+  if (usernameRaw) {
+    username = usernameRaw.toLowerCase().replace(/^@+/, "");
+    if (!/^[a-z0-9_.]{3,20}$/.test(username)) {
+      return {
+        error:
+          "Username darf nur Kleinbuchstaben, Ziffern, _ und . enthalten (3–20 Zeichen).",
+        field: "username",
+      };
+    }
+  }
+
+  const { error } = await admin()
+    .from("users")
+    .update({
+      first_name: firstName,
+      last_name: lastName,
+      phone,
+      phone_hash,
+      username,
+    } as never)
+    .eq("id", me);
+
+  if (error) {
+    if (error.code === "23505") {
+      return {
+        error:
+          "Diese Telefonnummer oder dieser Username ist schon vergeben.",
+      };
+    }
+    return { error: error.message };
+  }
+
+  updateTag(TAGS.user);
+  revalidatePath("/personal");
+  revalidatePath("/personal/edit");
+  return { ok: true };
 }
 
 function haversine(

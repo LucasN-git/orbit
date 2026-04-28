@@ -33,6 +33,7 @@ export type Database = {
         email: string | null;
         username: string | null;
         avatar_url: string | null;
+        phone: string | null;
         phone_hash: string | null;
         role: UserRole;
         created_at: string;

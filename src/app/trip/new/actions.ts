@@ -1,8 +1,9 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { admin } from "@/lib/supabase/admin";
 import { requireUserId } from "@/lib/auth";
+import { TAGS } from "@/lib/cache-tags";
 
 export type CreateTripInput = {
   orbitId: string;
@@ -50,6 +51,7 @@ export async function createTrip(
     if (pErr) return { ok: false, error: pErr.message };
   }
 
+  updateTag(TAGS.trips);
   revalidatePath("/trips");
   return { ok: true, id: tripId };
 }
@@ -65,6 +67,7 @@ export async function deleteTrip(
     .eq("id", tripId)
     .eq("user_id", me);
   if (error) return { ok: false, error: error.message };
+  updateTag(TAGS.trips);
   revalidatePath("/trips");
   return { ok: true };
 }

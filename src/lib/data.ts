@@ -1,8 +1,9 @@
 import "server-only";
-import { cache } from "react";
+import { unstable_cache } from "next/cache";
 import { admin } from "@/lib/supabase/admin";
 import { requireUserId } from "@/lib/auth";
 import { fullName, toneFor, type Tone } from "@/lib/data-helpers";
+import { TAGS } from "@/lib/cache-tags";
 
 export { toneFor, type Tone };
 
@@ -11,7 +12,16 @@ export { toneFor, type Tone };
  * (`requireUserId()`); Queries laufen weiter über den Service-Role-Client
  * mit manuellem User-Filter. Sobald RLS-Policies stehen, ersetzen wir
  * admin() durch den session-basierten Client und das Filtern fällt weg.
+ *
+ * Cache-Strategie:
+ * - Cross-Request via `unstable_cache` mit Domain-Tags (cache-tags.ts).
+ *   Server-Actions invalidieren via revalidateTag(...); TTL ist Backstop.
+ * - keyParts enthalten die userId — Cache pro User getrennt. Tags sind
+ *   userübergreifend, ein revalidateTag invalidiert global pro Domain.
  */
+const TTL_SHORT = 30;
+const TTL_MEDIUM = 60;
+const TTL_LONG = 300;
 
 function fmtDay(iso: string) {
   const d = new Date(iso);
@@ -20,19 +30,21 @@ function fmtDay(iso: string) {
 
 // ── Helpers ────────────────────────────────────────────────────────────
 
-// Per-Request-dedupliziert — getCurrentOrbit, getTrips, getPersonProfile
-// und getPersonalSpaceData rufen das alle, oft auf derselben Page.
-const getMutualIds = cache(async (meId: string): Promise<string[]> => {
-  const { data, error } = await admin()
-    .from("friend_links")
-    .select("user_a, user_b")
-    .eq("status", "mutual")
-    .or(`user_a.eq.${meId},user_b.eq.${meId}`);
-  if (error) throw error;
-  return ((data ?? []) as { user_a: string; user_b: string }[]).map((r) =>
-    r.user_a === meId ? r.user_b : r.user_a,
-  );
-});
+const _fetchMutualIds = unstable_cache(
+  async (meId: string): Promise<string[]> => {
+    const { data, error } = await admin()
+      .from("friend_links")
+      .select("user_a, user_b")
+      .eq("status", "mutual")
+      .or(`user_a.eq.${meId},user_b.eq.${meId}`);
+    if (error) throw error;
+    return ((data ?? []) as { user_a: string; user_b: string }[]).map((r) =>
+      r.user_a === meId ? r.user_b : r.user_a,
+    );
+  },
+  ["mutual-ids"],
+  { revalidate: TTL_LONG, tags: [TAGS.friends] },
+);
 
 // ── Types ──────────────────────────────────────────────────────────────
 
@@ -92,8 +104,11 @@ type UserRow = {
   first_name: string | null;
   last_name: string | null;
   email: string | null;
+  username?: string | null;
+  phone?: string | null;
   avatar_url: string | null;
   email_verified_at?: string | null;
+  onboarding_completed_at?: string | null;
 };
 
 type LocationRow = {
@@ -107,7 +122,7 @@ type LocationRow = {
 // ── Me ─────────────────────────────────────────────────────────────────
 
 export type Me = {
-  user: UserRow & { username: string | null };
+  user: UserRow & { username: string | null; phone: string | null };
   settings: {
     share_location: boolean;
     mutual_min_friends: number;
@@ -117,148 +132,35 @@ export type Me = {
     | null;
 };
 
+const _fetchMe = unstable_cache(
+  async (me: string): Promise<Me> => {
+    const sb = admin();
+    const [user, settings, location] = await Promise.all([
+      sb.from("users").select("*").eq("id", me).single(),
+      sb.from("user_settings").select("*").eq("user_id", me).maybeSingle(),
+      sb
+        .from("user_locations")
+        .select("*, orbit:orbits(id, slug, name, type)")
+        .eq("user_id", me)
+        .maybeSingle(),
+    ]);
+    if (user.error) throw user.error;
+    return {
+      user: user.data as Me["user"],
+      settings: settings.data as Me["settings"],
+      location: location.data as Me["location"],
+    };
+  },
+  ["me"],
+  { revalidate: TTL_MEDIUM, tags: [TAGS.user] },
+);
+
 export async function getMe(): Promise<Me> {
   const me = await requireUserId();
-  const sb = admin();
-  const [user, settings, location] = await Promise.all([
-    sb.from("users").select("*").eq("id", me).single(),
-    sb.from("user_settings").select("*").eq("user_id", me).maybeSingle(),
-    sb
-      .from("user_locations")
-      .select("*, orbit:orbits(id, slug, name, type)")
-      .eq("user_id", me)
-      .maybeSingle(),
-  ]);
-  if (user.error) throw user.error;
-  return {
-    user: user.data as Me["user"],
-    settings: settings.data as Me["settings"],
-    location: location.data as Me["location"],
-  };
+  return _fetchMe(me);
 }
 
-// ── Current Orbit ──────────────────────────────────────────────────────
-
-export async function getCurrentOrbit() {
-  const me = await requireUserId();
-  const sb = admin();
-  const meRow = await sb
-    .from("user_locations")
-    .select("orbit_id, last_seen_at, orbit:orbits(name)")
-    .eq("user_id", me)
-    .maybeSingle();
-  const data = meRow.data as
-    | { orbit_id: string; last_seen_at: string; orbit: { name: string } | null }
-    | null;
-  const orbitId = data?.orbit_id;
-
-  const mutualIds = await getMutualIds(me);
-
-  let friends: FriendInOrbit[] = [];
-  if (orbitId && mutualIds.length > 0) {
-    const { data: locs, error } = await sb
-      .from("user_locations")
-      .select(
-        "user_id, last_seen_at, orbit:orbits(name), user:users(first_name, last_name)",
-      )
-      .eq("orbit_id", orbitId)
-      .in("user_id", mutualIds);
-    if (error) throw error;
-    friends = ((locs ?? []) as LocationRow[]).map((r) => ({
-      id: r.user_id,
-      name: fullName(r.user ?? {}),
-      city: r.orbit?.name ?? "",
-      since: fmtDay(r.last_seen_at),
-      tone: toneFor(r.user_id),
-    }));
-  }
-
-  let mutuals: Mutual[] = [];
-  if (orbitId && mutualIds.length > 0) {
-    const orFilter = mutualIds
-      .map((id) => `user_a.eq.${id},user_b.eq.${id}`)
-      .join(",");
-    const { data: secondHop, error: e2 } = await sb
-      .from("friend_links")
-      .select("user_a, user_b")
-      .eq("status", "mutual")
-      .or(orFilter);
-    if (e2) throw e2;
-    const counts = new Map<string, number>();
-    for (const link of (secondHop ?? []) as {
-      user_a: string;
-      user_b: string;
-    }[]) {
-      for (const u of [link.user_a, link.user_b]) {
-        if (u === me || mutualIds.includes(u)) continue;
-        counts.set(u, (counts.get(u) ?? 0) + 1);
-      }
-    }
-    if (counts.size > 0) {
-      const candidateIds = Array.from(counts.keys());
-      const { data: cand, error: e3 } = await sb
-        .from("user_locations")
-        .select(
-          "user_id, orbit:orbits(name), user:users(first_name, last_name)",
-        )
-        .eq("orbit_id", orbitId)
-        .in("user_id", candidateIds);
-      if (e3) throw e3;
-      mutuals = ((cand ?? []) as LocationRow[]).map((r) => ({
-        id: r.user_id,
-        name: fullName(r.user ?? {}),
-        city: r.orbit?.name ?? "",
-        mutuals: counts.get(r.user_id) ?? 0,
-        tone: toneFor(r.user_id),
-      }));
-      mutuals.sort((a, b) => b.mutuals - a.mutuals);
-    }
-  }
-
-  const [{ count: contactsTotal }, { count: contactsOnOrbit }] =
-    await Promise.all([
-      sb
-        .from("contacts")
-        .select("id", { count: "exact", head: true })
-        .eq("user_id", me),
-      sb
-        .from("contacts")
-        .select("id", { count: "exact", head: true })
-        .eq("user_id", me)
-        .not("matched_user_id", "is", null),
-    ]);
-
-  // Feature-Unlock-Indikator (PRD §6.7)
-  // Mutuals startet erst, wenn man genug Kontakte auf Orbit hat —
-  // wir nutzen mutual_min_friends aus den Settings als Schwelle (default 10).
-  const { data: settingsRow } = await sb
-    .from("user_settings")
-    .select("mutual_min_friends")
-    .eq("user_id", me)
-    .maybeSingle();
-  const mutualThreshold =
-    (settingsRow as { mutual_min_friends?: number } | null)
-      ?.mutual_min_friends ?? 10;
-  const mutualUnlock =
-    (contactsOnOrbit ?? 0) >= mutualThreshold
-      ? null
-      : {
-          missing: mutualThreshold - (contactsOnOrbit ?? 0),
-          threshold: mutualThreshold,
-        };
-
-  return {
-    city: data?.orbit?.name ?? null,
-    since: data ? fmtDay(data.last_seen_at) : "—",
-    friends,
-    mutuals,
-    contactsTotal: contactsTotal ?? 0,
-    contactsOnOrbit: contactsOnOrbit ?? 0,
-    mutualUnlock,
-  };
-}
-
-// ── Friends Cities Map ─────────────────────────────────────────────────
+// ── Orbit Home (Current Orbit + Cities Map) ───────────────────────────
 
 export type FriendCityCluster = {
   orbitId: string;
@@ -274,101 +176,233 @@ export type FriendsCitiesMap = {
   cities: FriendCityCluster[];
 };
 
-export async function getFriendsCitiesMap(): Promise<FriendsCitiesMap> {
-  const me = await requireUserId();
-  const sb = admin();
-  const mutualIds = await getMutualIds(me);
+export type OrbitHomeData = {
+  city: string | null;
+  since: string;
+  friends: FriendInOrbit[];
+  mutuals: Mutual[];
+  contactsTotal: number;
+  contactsOnOrbit: number;
+  mutualUnlock: { missing: number; threshold: number } | null;
+  citiesMap: FriendsCitiesMap;
+};
 
-  type OrbitCoords = {
-    name: string;
-    country_code: string | null;
-    centroid_lat: number | null;
-    centroid_lng: number | null;
-  };
+type OrbitCoords = {
+  name: string;
+  country_code: string | null;
+  centroid_lat: number | null;
+  centroid_lng: number | null;
+};
 
-  const meLocPromise = sb
-    .from("user_locations")
-    .select("orbit:orbits(name, country_code, centroid_lat, centroid_lng)")
-    .eq("user_id", me)
-    .maybeSingle();
+type FriendLocRow = {
+  user_id: string;
+  orbit_id: string;
+  last_seen_at: string;
+  orbit: OrbitCoords | null;
+  user: UserRow | null;
+};
 
-  const friendLocsPromise =
-    mutualIds.length > 0
-      ? sb
+const _fetchOrbitHomeData = unstable_cache(
+  async (me: string): Promise<OrbitHomeData> => {
+    const sb = admin();
+
+    // Parallel: meine Location, mutualIds, friend-Locations, Contacts-Counts,
+    // Settings — alles, was die Home-Page braucht. Ein Query-Round-Trip-Tier.
+    const mutualIds = await _fetchMutualIds(me);
+    const [
+      meLocRes,
+      friendLocsRes,
+      contactsTotalRes,
+      contactsOnOrbitRes,
+      settingsRes,
+    ] = await Promise.all([
+      sb
+        .from("user_locations")
+        .select(
+          "orbit_id, last_seen_at, orbit:orbits(name, country_code, centroid_lat, centroid_lng)",
+        )
+        .eq("user_id", me)
+        .maybeSingle(),
+      mutualIds.length > 0
+        ? sb
+            .from("user_locations")
+            .select(
+              "user_id, orbit_id, last_seen_at, orbit:orbits(name, country_code, centroid_lat, centroid_lng), user:users(first_name, last_name)",
+            )
+            .in("user_id", mutualIds)
+        : Promise.resolve({ data: [] as FriendLocRow[], error: null }),
+      sb
+        .from("contacts")
+        .select("id", { count: "exact", head: true })
+        .eq("user_id", me),
+      sb
+        .from("contacts")
+        .select("id", { count: "exact", head: true })
+        .eq("user_id", me)
+        .not("matched_user_id", "is", null),
+      sb
+        .from("user_settings")
+        .select("mutual_min_friends")
+        .eq("user_id", me)
+        .maybeSingle(),
+    ]);
+
+    const meRow = meLocRes.data as
+      | {
+          orbit_id: string;
+          last_seen_at: string;
+          orbit: OrbitCoords | null;
+        }
+      | null;
+    const orbitId = meRow?.orbit_id;
+    const friendLocs = (friendLocsRes.data ?? []) as FriendLocRow[];
+
+    // Friends-In-Orbit aus dem gleichen friendLocs-Result clientseitig filtern.
+    const friends: FriendInOrbit[] = orbitId
+      ? friendLocs
+          .filter((r) => r.orbit_id === orbitId)
+          .map((r) => ({
+            id: r.user_id,
+            name: fullName(r.user ?? {}),
+            city: r.orbit?.name ?? "",
+            since: fmtDay(r.last_seen_at),
+            tone: toneFor(r.user_id),
+          }))
+      : [];
+
+    // Second-Hop für Mutuals — nur wenn jemand im selben Orbit ist.
+    let mutuals: Mutual[] = [];
+    if (orbitId && mutualIds.length > 0) {
+      const orFilter = mutualIds
+        .map((id) => `user_a.eq.${id},user_b.eq.${id}`)
+        .join(",");
+      const { data: secondHop, error: e2 } = await sb
+        .from("friend_links")
+        .select("user_a, user_b")
+        .eq("status", "mutual")
+        .or(orFilter);
+      if (e2) throw e2;
+      const counts = new Map<string, number>();
+      for (const link of (secondHop ?? []) as {
+        user_a: string;
+        user_b: string;
+      }[]) {
+        for (const u of [link.user_a, link.user_b]) {
+          if (u === me || mutualIds.includes(u)) continue;
+          counts.set(u, (counts.get(u) ?? 0) + 1);
+        }
+      }
+      if (counts.size > 0) {
+        const candidateIds = Array.from(counts.keys());
+        const { data: cand, error: e3 } = await sb
           .from("user_locations")
           .select(
-            "user_id, orbit_id, orbit:orbits(name, country_code, centroid_lat, centroid_lng), user:users(first_name, last_name)",
+            "user_id, orbit:orbits(name), user:users(first_name, last_name)",
           )
-          .in("user_id", mutualIds)
-      : Promise.resolve({ data: [], error: null });
-
-  const [meLocRes, friendLocsRes] = await Promise.all([
-    meLocPromise,
-    friendLocsPromise,
-  ]);
-
-  const meOrbit = (meLocRes.data as { orbit: OrbitCoords | null } | null)
-    ?.orbit;
-  const meCoords =
-    meOrbit && meOrbit.centroid_lat != null && meOrbit.centroid_lng != null
-      ? {
-          lat: Number(meOrbit.centroid_lat),
-          lng: Number(meOrbit.centroid_lng),
-          city: meOrbit.name,
-        }
-      : null;
-
-  type FriendLocRow = {
-    user_id: string;
-    orbit_id: string;
-    orbit: OrbitCoords | null;
-    user: UserRow | null;
-  };
-  const rows = (friendLocsRes.data ?? []) as FriendLocRow[];
-
-  const clusters = new Map<string, FriendCityCluster>();
-  for (const r of rows) {
-    if (
-      !r.orbit ||
-      r.orbit.centroid_lat == null ||
-      r.orbit.centroid_lng == null
-    ) {
-      continue;
+          .eq("orbit_id", orbitId)
+          .in("user_id", candidateIds);
+        if (e3) throw e3;
+        mutuals = ((cand ?? []) as LocationRow[]).map((r) => ({
+          id: r.user_id,
+          name: fullName(r.user ?? {}),
+          city: r.orbit?.name ?? "",
+          mutuals: counts.get(r.user_id) ?? 0,
+          tone: toneFor(r.user_id),
+        }));
+        mutuals.sort((a, b) => b.mutuals - a.mutuals);
+      }
     }
-    const existing = clusters.get(r.orbit_id);
-    const friend = {
-      id: r.user_id,
-      name: fullName(r.user ?? {}),
-      tone: toneFor(r.user_id),
+
+    const contactsTotal = contactsTotalRes.count ?? 0;
+    const contactsOnOrbit = contactsOnOrbitRes.count ?? 0;
+
+    // Feature-Unlock-Indikator (PRD §6.7)
+    const mutualThreshold =
+      (settingsRes.data as { mutual_min_friends?: number } | null)
+        ?.mutual_min_friends ?? 10;
+    const mutualUnlock =
+      contactsOnOrbit >= mutualThreshold
+        ? null
+        : {
+            missing: mutualThreshold - contactsOnOrbit,
+            threshold: mutualThreshold,
+          };
+
+    // Cities-Map aus demselben friendLocs-Result.
+    const meCoords =
+      meRow?.orbit &&
+      meRow.orbit.centroid_lat != null &&
+      meRow.orbit.centroid_lng != null
+        ? {
+            lat: Number(meRow.orbit.centroid_lat),
+            lng: Number(meRow.orbit.centroid_lng),
+            city: meRow.orbit.name,
+          }
+        : null;
+
+    const clusters = new Map<string, FriendCityCluster>();
+    for (const r of friendLocs) {
+      if (
+        !r.orbit ||
+        r.orbit.centroid_lat == null ||
+        r.orbit.centroid_lng == null
+      ) {
+        continue;
+      }
+      const existing = clusters.get(r.orbit_id);
+      const friend = {
+        id: r.user_id,
+        name: fullName(r.user ?? {}),
+        tone: toneFor(r.user_id),
+      };
+      if (existing) {
+        existing.friends.push(friend);
+      } else {
+        clusters.set(r.orbit_id, {
+          orbitId: r.orbit_id,
+          city: r.orbit.name,
+          countryCode: r.orbit.country_code,
+          lat: Number(r.orbit.centroid_lat),
+          lng: Number(r.orbit.centroid_lng),
+          friends: [friend],
+        });
+      }
+    }
+
+    return {
+      city: meRow?.orbit?.name ?? null,
+      since: meRow ? fmtDay(meRow.last_seen_at) : "—",
+      friends,
+      mutuals,
+      contactsTotal,
+      contactsOnOrbit,
+      mutualUnlock,
+      citiesMap: {
+        me: meCoords,
+        cities: Array.from(clusters.values()).sort(
+          (a, b) => b.friends.length - a.friends.length,
+        ),
+      },
     };
-    if (existing) {
-      existing.friends.push(friend);
-    } else {
-      clusters.set(r.orbit_id, {
-        orbitId: r.orbit_id,
-        city: r.orbit.name,
-        countryCode: r.orbit.country_code,
-        lat: Number(r.orbit.centroid_lat),
-        lng: Number(r.orbit.centroid_lng),
-        friends: [friend],
-      });
-    }
-  }
+  },
+  ["orbit-home-data"],
+  {
+    revalidate: TTL_MEDIUM,
+    tags: [TAGS.orbit, TAGS.friends, TAGS.contacts],
+  },
+);
 
-  return {
-    me: meCoords,
-    cities: Array.from(clusters.values()).sort(
-      (a, b) => b.friends.length - a.friends.length,
-    ),
-  };
+export async function getOrbitHomeData(): Promise<OrbitHomeData> {
+  const me = await requireUserId();
+  return _fetchOrbitHomeData(me);
 }
 
 // ── Calendar / Meetups ─────────────────────────────────────────────────
 
-export async function getUpcomingMeetups(): Promise<CalendarMeetup[]> {
-  const me = await requireUserId();
-  const sb = admin();
-  const today = new Date().toISOString().slice(0, 10);
+const _fetchUpcomingMeetups = unstable_cache(
+  async (me: string): Promise<CalendarMeetup[]> => {
+    const sb = admin();
+    const today = new Date().toISOString().slice(0, 10);
 
   const { data: created, error: e1 } = await sb
     .from("meetups")
@@ -422,23 +456,31 @@ export async function getUpcomingMeetups(): Promise<CalendarMeetup[]> {
     partMap.get(r.meetup_id)!.push(name);
   }
 
-  return Array.from(all.values())
-    .map((m) => ({
-      id: m.id,
-      title: m.title,
-      date: m.date,
-      time: m.time,
-      location: m.location,
-      participants: partMap.get(m.id) ?? [],
-    }))
-    .sort((a, b) => a.date.localeCompare(b.date));
+    return Array.from(all.values())
+      .map((m) => ({
+        id: m.id,
+        title: m.title,
+        date: m.date,
+        time: m.time,
+        location: m.location,
+        participants: partMap.get(m.id) ?? [],
+      }))
+      .sort((a, b) => a.date.localeCompare(b.date));
+  },
+  ["upcoming-meetups"],
+  { revalidate: TTL_SHORT, tags: [TAGS.meetups] },
+);
+
+export async function getUpcomingMeetups(): Promise<CalendarMeetup[]> {
+  const me = await requireUserId();
+  return _fetchUpcomingMeetups(me);
 }
 
 // ── Trips ──────────────────────────────────────────────────────────────
 
-export async function getTrips(): Promise<TripCardData[]> {
-  const me = await requireUserId();
-  const sb = admin();
+const _fetchTrips = unstable_cache(
+  async (me: string): Promise<TripCardData[]> => {
+    const sb = admin();
 
   type TripRow = {
     id: string;
@@ -465,7 +507,7 @@ export async function getTrips(): Promise<TripCardData[]> {
 
   if (myTrips.length === 0) return [];
 
-  const mutualIds = await getMutualIds(me);
+    const mutualIds = await _fetchMutualIds(me);
   const orbitIds = Array.from(new Set(myTrips.map((t) => t.orbit_id)));
 
   type FriendTripRow = {
@@ -489,26 +531,34 @@ export async function getTrips(): Promise<TripCardData[]> {
     );
   const friendTrips = (friendTripsRaw ?? []) as FriendTripRow[];
 
-  return myTrips.map((t) => {
-    const overlaps = friendTrips
-      .filter(
-        (ft) =>
-          ft.orbit_id === t.orbit_id &&
-          ft.start_date <= t.end_date &&
-          ft.end_date >= t.start_date,
-      )
-      .map((ft) => ft.user?.first_name ?? "");
-    return {
-      id: t.id,
-      city: t.orbit?.name ?? "",
-      country: countryName(t.orbit?.country_code ?? null) ?? t.orbit?.name ?? "",
-      countryCode: t.orbit?.country_code ?? null,
-      start: t.start_date,
-      end: t.end_date,
-      reason: t.reason,
-      overlaps: Array.from(new Set(overlaps.filter(Boolean))),
-    };
-  });
+    return myTrips.map((t) => {
+      const overlaps = friendTrips
+        .filter(
+          (ft) =>
+            ft.orbit_id === t.orbit_id &&
+            ft.start_date <= t.end_date &&
+            ft.end_date >= t.start_date,
+        )
+        .map((ft) => ft.user?.first_name ?? "");
+      return {
+        id: t.id,
+        city: t.orbit?.name ?? "",
+        country: countryName(t.orbit?.country_code ?? null) ?? t.orbit?.name ?? "",
+        countryCode: t.orbit?.country_code ?? null,
+        start: t.start_date,
+        end: t.end_date,
+        reason: t.reason,
+        overlaps: Array.from(new Set(overlaps.filter(Boolean))),
+      };
+    });
+  },
+  ["trips"],
+  { revalidate: TTL_MEDIUM, tags: [TAGS.trips, TAGS.friends] },
+);
+
+export async function getTrips(): Promise<TripCardData[]> {
+  const me = await requireUserId();
+  return _fetchTrips(me);
 }
 
 function countryName(code: string | null): string | null {
@@ -529,9 +579,9 @@ function countryName(code: string | null): string | null {
 
 // ── Notifications ──────────────────────────────────────────────────────
 
-export async function getNotifications(): Promise<NotificationItem[]> {
-  const me = await requireUserId();
-  const sb = admin();
+const _fetchNotifications = unstable_cache(
+  async (me: string): Promise<NotificationItem[]> => {
+    const sb = admin();
   type NotificationRow = {
     id: string;
     type: NotificationItem["type"];
@@ -564,20 +614,33 @@ export async function getNotifications(): Promise<NotificationItem[]> {
     for (const u of (us ?? []) as UserRow[]) actors.set(u.id, fullName(u));
   }
 
-  return data.map((n) => {
-    const actor = actors.get(n.payload?.actor_id) ?? "Jemand";
-    const orbit = n.payload?.orbit ?? "";
-    const { title, body } = renderNotification(n.type, actor, orbit, n.payload);
-    return {
-      id: n.id,
-      type: n.type,
-      title,
-      body,
-      when: relativeTime(n.created_at),
-      unread: n.read_at === null,
-      href: hrefForNotification(n.type, n.payload),
-    };
-  });
+    return data.map((n) => {
+      const actor = actors.get(n.payload?.actor_id) ?? "Jemand";
+      const orbit = n.payload?.orbit ?? "";
+      const { title, body } = renderNotification(
+        n.type,
+        actor,
+        orbit,
+        n.payload,
+      );
+      return {
+        id: n.id,
+        type: n.type,
+        title,
+        body,
+        when: relativeTime(n.created_at),
+        unread: n.read_at === null,
+        href: hrefForNotification(n.type, n.payload),
+      };
+    });
+  },
+  ["notifications-list"],
+  { revalidate: TTL_SHORT, tags: [TAGS.notifications] },
+);
+
+export async function getNotifications(): Promise<NotificationItem[]> {
+  const me = await requireUserId();
+  return _fetchNotifications(me);
 }
 
 function hrefForNotification(
@@ -650,9 +713,9 @@ function relativeTime(iso: string): string {
 
 // ── Profile detail ─────────────────────────────────────────────────────
 
-export async function getPersonProfile(id: string) {
-  const me = await requireUserId();
-  const sb = admin();
+const _fetchPersonProfile = unstable_cache(
+  async (me: string, id: string) => {
+    const sb = admin();
   const [{ data: userRaw }, { data: locRaw }] = await Promise.all([
     sb.from("users").select("*").eq("id", id).maybeSingle(),
     sb
@@ -667,7 +730,7 @@ export async function getPersonProfile(id: string) {
     | { last_seen_at: string; orbit: { name: string } | null }
     | null;
 
-  const mutualIds = await getMutualIds(me);
+    const mutualIds = await _fetchMutualIds(me);
   const isFriend = mutualIds.includes(id);
 
   let mutualsCount = 0;
@@ -683,66 +746,93 @@ export async function getPersonProfile(id: string) {
     mutualsCount = theirIds.filter((x) => mutualIds.includes(x)).length;
   }
 
-  return {
-    id: user.id,
-    name: fullName(user),
-    city: loc?.orbit?.name ?? "—",
-    since: loc?.last_seen_at ? fmtDay(loc.last_seen_at) : "—",
-    isFriend,
-    mutualsCount,
-    tone: toneFor(user.id),
-  };
+    return {
+      id: user.id,
+      name: fullName(user),
+      city: loc?.orbit?.name ?? "—",
+      since: loc?.last_seen_at ? fmtDay(loc.last_seen_at) : "—",
+      isFriend,
+      mutualsCount,
+      tone: toneFor(user.id),
+    };
+  },
+  ["person-profile"],
+  { revalidate: TTL_MEDIUM, tags: [TAGS.user, TAGS.friends] },
+);
+
+export async function getPersonProfile(id: string) {
+  const me = await requireUserId();
+  return _fetchPersonProfile(me, id);
 }
 
 // ── Personal Space ─────────────────────────────────────────────────────
 
+const _fetchPersonalSpaceData = unstable_cache(
+  async (me: string) => {
+    const sb = admin();
+    const [meRes, friendsRes, contactsTotal, contactsOnOrbit] =
+      await Promise.all([
+        _fetchMe(me),
+        (async () => {
+          const ids = await _fetchMutualIds(me);
+          if (ids.length === 0) return [];
+          const { data } = await sb
+            .from("users")
+            .select("id, first_name, last_name")
+            .in("id", ids)
+            .limit(8);
+          return ((data ?? []) as UserRow[]).map((u) => ({
+            id: u.id,
+            name: fullName(u),
+            tone: toneFor(u.id),
+          }));
+        })(),
+        sb
+          .from("contacts")
+          .select("id", { count: "exact", head: true })
+          .eq("user_id", me),
+        sb
+          .from("contacts")
+          .select("id", { count: "exact", head: true })
+          .eq("user_id", me)
+          .not("matched_user_id", "is", null),
+      ]);
+
+    return {
+      me: meRes,
+      friends: friendsRes,
+      contactsTotal: contactsTotal.count ?? 0,
+      contactsOnOrbit: contactsOnOrbit.count ?? 0,
+    };
+  },
+  ["personal-space-data"],
+  {
+    revalidate: TTL_MEDIUM,
+    tags: [TAGS.user, TAGS.friends, TAGS.contacts],
+  },
+);
+
 export async function getPersonalSpaceData() {
   const me = await requireUserId();
-  const sb = admin();
-  const [meRes, friendsRes, contactsTotal, contactsOnOrbit] =
-    await Promise.all([
-      getMe(),
-      (async () => {
-        const ids = await getMutualIds(me);
-        if (ids.length === 0) return [];
-        const { data } = await sb
-          .from("users")
-          .select("id, first_name, last_name")
-          .in("id", ids)
-          .limit(8);
-        return ((data ?? []) as UserRow[]).map((u) => ({
-          id: u.id,
-          name: fullName(u),
-          tone: toneFor(u.id),
-        }));
-      })(),
-      sb
-        .from("contacts")
-        .select("id", { count: "exact", head: true })
-        .eq("user_id", me),
-      sb
-        .from("contacts")
-        .select("id", { count: "exact", head: true })
-        .eq("user_id", me)
-        .not("matched_user_id", "is", null),
-    ]);
-
-  return {
-    me: meRes,
-    friends: friendsRes,
-    contactsTotal: contactsTotal.count ?? 0,
-    contactsOnOrbit: contactsOnOrbit.count ?? 0,
-  };
+  return _fetchPersonalSpaceData(me);
 }
 
 // ── Notification Badge ─────────────────────────────────────────────────
 
+const _fetchUnreadNotificationCount = unstable_cache(
+  async (me: string): Promise<number> => {
+    const { count } = await admin()
+      .from("notifications")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", me)
+      .is("read_at", null);
+    return count ?? 0;
+  },
+  ["unread-notification-count"],
+  { revalidate: TTL_SHORT, tags: [TAGS.notifications] },
+);
+
 export async function getUnreadNotificationCount(): Promise<number> {
   const me = await requireUserId();
-  const { count } = await admin()
-    .from("notifications")
-    .select("id", { count: "exact", head: true })
-    .eq("user_id", me)
-    .is("read_at", null);
-  return count ?? 0;
+  return _fetchUnreadNotificationCount(me);
 }

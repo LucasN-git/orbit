@@ -3,6 +3,8 @@
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
+import { admin } from "@/lib/supabase/admin";
+import { hashPhone, normalizeToE164 } from "@/lib/phone";
 
 /**
  * Bevorzugt NEXT_PUBLIC_SITE_URL (in Vercel-Env gesetzt), fällt sonst auf
@@ -68,7 +70,7 @@ export async function signInWithPassword(formData: FormData) {
   if (error) {
     return { error: "Email oder Passwort stimmt nicht." };
   }
-  redirect("/onboarding/location");
+  redirect("/onboarding/profile");
 }
 
 /**
@@ -101,7 +103,7 @@ export async function signUpWithPassword(formData: FormData) {
 
   // Session da → Email-Bestätigung ist deaktiviert, User ist drin.
   if (data.session) {
-    redirect("/onboarding/location");
+    redirect("/onboarding/profile");
   }
 
   // Sonst: Bestätigungsmail wartet im Postfach.
@@ -130,6 +132,122 @@ export async function signInWithGoogle() {
   if (data.url) {
     redirect(data.url);
   }
+}
+
+/**
+ * Onboarding-Flag setzen (idempotent — `is null`-Check verhindert Overwrites).
+ * Wird vom Contacts-Step gerufen, sobald der User entweder fertig oder
+ * explizit übersprungen hat. Beim nächsten Login redirected der Auth-
+ * Callback dann direkt in die App, nicht mehr zurück ins Onboarding.
+ *
+ * Profil-Pflichtfelder werden hier nochmal serverseitig geprüft — falls der
+ * User irgendwie an `/onboarding/profile` vorbei gekommen ist, fällt das
+ * spätestens hier auf und wir lassen ihn nicht weiter.
+ */
+export async function markOnboardingComplete() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "Nicht eingeloggt." };
+
+  const sb = admin();
+  const { data: profile } = await sb
+    .from("users")
+    .select("first_name, last_name, phone")
+    .eq("id", user.id)
+    .maybeSingle();
+  const p = profile as
+    | { first_name: string | null; last_name: string | null; phone: string | null }
+    | null;
+  if (!p?.first_name?.trim() || !p?.last_name?.trim() || !p?.phone) {
+    return { error: "Profil unvollständig." };
+  }
+
+  const { error } = await supabase
+    .from("users")
+    .update({ onboarding_completed_at: new Date().toISOString() })
+    .eq("id", user.id)
+    .is("onboarding_completed_at", null);
+
+  if (error) return { error: error.message };
+  return { ok: true as const };
+}
+
+/**
+ * Onboarding Schritt 2 — Profil. Vorname, Nachname, Telefon (Pflicht), und
+ * optional ein Username (für QR / Deep-Link Add, PRD §6.6). Die Telefonnummer
+ * wird normalisiert (E.164) und zusätzlich gehasht in `phone_hash` abgelegt,
+ * damit der bestehende Adressbuch-Match-Trigger (`handle_contact_match`)
+ * sofort gegen Bestandsuser feuert.
+ */
+export async function saveOnboardingProfile(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "Nicht eingeloggt." };
+
+  const firstName = String(formData.get("first_name") ?? "").trim();
+  const lastName = String(formData.get("last_name") ?? "").trim();
+  const usernameRaw = String(formData.get("username") ?? "").trim();
+  const phoneRaw = String(formData.get("phone") ?? "").trim();
+
+  if (!firstName) return { error: "Vorname fehlt." };
+  if (!lastName) return { error: "Nachname fehlt." };
+  if (!phoneRaw) return { error: "Telefonnummer fehlt." };
+
+  const phone = normalizeToE164(phoneRaw);
+  if (!phone) {
+    return {
+      error: "Telefonnummer ungültig. Beispiel: +49 170 1234567",
+    };
+  }
+  const phone_hash = hashPhone(phone);
+
+  // Username optional, aber wenn gesetzt, normalisieren.
+  const username = usernameRaw
+    ? usernameRaw.toLowerCase().replace(/^@+/, "")
+    : null;
+  if (username && !/^[a-z0-9_.]{3,20}$/.test(username)) {
+    return {
+      error:
+        "Username darf nur Kleinbuchstaben, Ziffern, _ und . enthalten (3–20 Zeichen).",
+    };
+  }
+
+  const sb = admin();
+  const { error } = await sb
+    .from("users")
+    .update({
+      first_name: firstName,
+      last_name: lastName,
+      phone,
+      phone_hash,
+      ...(username ? { username } : {}),
+    } as never)
+    .eq("id", user.id);
+
+  if (error) {
+    if (error.code === "23505") {
+      return {
+        error:
+          "Diese Telefonnummer oder dieser Username ist schon vergeben.",
+      };
+    }
+    return { error: error.message };
+  }
+
+  redirect("/onboarding/location");
+}
+
+/**
+ * Form-Action-Variante: setzt Flag und redirected. Genutzt vom
+ * "Erstmal überspringen"-Link auf /onboarding/contacts.
+ */
+export async function skipOnboardingAndEnter() {
+  await markOnboardingComplete();
+  redirect("/");
 }
 
 /**
